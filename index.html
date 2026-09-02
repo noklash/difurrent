@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="Difurrent is an independent technology company building software, infrastructure, AI systems, and experimental technology."
+  />
+
+  <meta name="theme-color" content="#f4f4f1" />
+
+  <title>Difurrent — A different current.</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav-container">
+      <a class="wordmark" href="/" aria-label="Difurrent home">
+        Difurrent
+      </a>
+
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#writing">Writing</a>
+        <a href="#contact">Contact</a>
+        <a
+          class="x-link"
+          href="https://x.com/difurrent"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Difurrent on X"
+        >
+          @difurrent
+        </a>
+      </nav>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Open navigation"
+      >
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <nav
+      class="mobile-nav"
+      id="mobile-nav"
+      aria-label="Mobile navigation"
+      aria-hidden="true"
+    >
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#writing">Writing</a>
+      <a href="#contact">Contact</a>
+      <a
+        href="https://x.com/difurrent"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @difurrent
+      </a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="eyebrow reveal">
+           technology company
+        </div>
+
+        <h1 class="hero-title reveal reveal-delay-1">
+          A different<br />
+          current.
+        </h1>
+
+        <div class="hero-bottom reveal reveal-delay-2">
+          <p class="hero-description">
+            Difurrent builds technology, systems, and infrastructure
+            for the way the world is moving.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#work">
+              Explore the work
+              <span aria-hidden="true">↘</span>
+            </a>
+
+            <a class="button button-secondary" href="#about">
+              About Difurrent
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="section philosophy" id="philosophy">
+      <div class="container section-grid">
+        <div class="section-index">
+          01
+        </div>
+
+        <div class="section-content">
+          <p class="section-label">
+            Philosophy
+          </p>
+
+          <h2>
+            Build differently.<br />
+            Understand deeply.
+          </h2>
+
+          <p class="large-copy">
+            We start with the system itself. The layers beneath the
+            interface. The mechanisms beneath the abstraction. The
+            constraints that make something work.
+          </p>
+
+          <p class="body-copy">
+            Difurrent explores technology from first principles,
+            building software and infrastructure while developing a
+            deeper understanding of the systems that support them.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AREAS -->
+    <section class="section areas">
+      <div class="container">
+        <div class="section-heading-row">
+          <div>
+            <p class="section-label">Areas of work</p>
+            <h2>Four fields of exploration.</h2>
+          </div>
+
+          <span class="technical-note">
+            / 04
+          </span>
+        </div>
+
+        <div class="areas-grid">
+          <article class="area">
+            <span class="area-number">01</span>
+            <h3>Software</h3>
+            <p>
+              Tools and applications built around useful ideas,
+              careful engineering, and clear interfaces.
+            </p>
+          </article>
+
+          <article class="area">
+            <span class="area-number">02</span>
+            <h3>Infrastructure</h3>
+            <p>
+              Systems that make software reliable, observable,
+              scalable, and understandable.
+            </p>
+          </article>
+
+          <article class="area">
+            <span class="area-number">03</span>
+            <h3>AI Systems</h3>
+            <p>
+              Infrastructure and systems engineering for the
+              computational demands of intelligent software.
+            </p>
+          </article>
+
+          <article class="area">
+            <span class="area-number">04</span>
+            <h3>Experiments</h3>
+            <p>
+              Small investigations, prototypes, and strange ideas
+              worth following far enough to learn something.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTED WORK -->
+    <section class="section work-section" id="work">
+      <div class="container">
+        <div class="section-heading-row">
+          <div>
+            <p class="section-label">Selected work</p>
+            <h2>Things being built.</h2>
+          </div>
+
+          <span class="technical-note">
+            001 / CURRENT
+          </span>
+        </div>
+
+        <div class="project-list">
+
+          <article class="project project-featured" id="procwatch">
+            <div class="project-top">
+              <div>
+                <p class="project-kicker">
+                  Systems engineering
+                </p>
+
+                <h3>ProcWatch</h3>
+              </div>
+
+              <span class="project-index">01</span>
+            </div>
+
+            <div class="project-body">
+              <p>
+                A Linux process-monitoring tool built in C by
+                reconstructing process information directly from the
+                <code>/proc</code> filesystem.
+              </p>
+
+              <div class="project-meta" aria-label="Project technologies">
+                <span>C</span>
+                <span>Linux</span>
+                <span>Systems</span>
+                <span>/proc</span>
+              </div>
+            </div>
+
+            <div class="project-footer">
+              <button
+                class="text-link project-dialog-trigger"
+                type="button"
+                data-dialog="procwatch-dialog"
+              >
+                Read project
+                <span aria-hidden="true">↗</span>
+              </button>
+
+              <span class="project-status">
+                Built
+              </span>
+            </div>
+          </article>
+
+          <article class="project project-placeholder">
+            <div class="project-top">
+              <div>
+                <p class="project-kicker">
+                  Software
+                </p>
+
+                <h3>Coming soon</h3>
+              </div>
+
+              <span class="project-index">02</span>
+            </div>
+
+            <div class="project-footer">
+              <span class="placeholder-note">
+                Something is being built here.
+              </span>
+            </div>
+          </article>
+
+          <article class="project project-placeholder">
+            <div class="project-top">
+              <div>
+                <p class="project-kicker">
+                  Infrastructure
+                </p>
+
+                <h3>Coming soon</h3>
+              </div>
+
+              <span class="project-index">03</span>
+            </div>
+
+            <div class="project-footer">
+              <span class="placeholder-note">
+                The current is still moving.
+              </span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ENGINEERING PHILOSOPHY -->
+    <section class="section engineering-section">
+      <div class="container">
+        <div class="engineering-note">
+          <div class="note-margin">
+            <span>FIELD NOTES</span>
+            <span>DF / 001</span>
+          </div>
+
+          <div class="note-main">
+            <p class="note-label">
+              Engineering philosophy
+            </p>
+
+            <blockquote>
+              We are interested in what happens underneath the
+              abstraction.
+            </blockquote>
+
+            <div class="note-subjects">
+              <span>Linux processes</span>
+              <span>CPU scheduling</span>
+              <span>Memory</span>
+              <span>Networking</span>
+              <span>Distributed systems</span>
+              <span>Infrastructure</span>
+              <span>AI systems</span>
+            </div>
+          </div>
+
+          <div class="note-footer">
+            <span>OBSERVE</span>
+            <span>UNDERSTAND</span>
+            <span>BUILD</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about-section" id="about">
+      <div class="container section-grid">
+        <div class="section-index">
+          02
+        </div>
+
+        <div class="section-content">
+          <p class="section-label">
+            About
+          </p>
+
+          <h2>
+            A company built<br />
+            to explore.
+          </h2>
+
+          <p class="large-copy">
+            Difurrent is an independent technology company exploring
+            software, infrastructure, AI, and systems engineering.
+          </p>
+
+          <p class="body-copy">
+            The company exists to build things worth understanding.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WRITING -->
+    <section class="section writing-section" id="writing">
+      <div class="container">
+        <div class="section-heading-row">
+          <div>
+            <p class="section-label">Writing / Lab</p>
+            <h2>Notes from the current.</h2>
+          </div>
+
+          <span class="technical-note">
+            FIELD NOTES
+          </span>
+        </div>
+
+        <div class="notes-list">
+
+          <article class="note">
+            <div class="note-number">01</div>
+
+            <div class="note-content">
+              <p class="note-type">
+                Systems / Linux
+              </p>
+
+              <h3>
+                Rebuilding Linux process monitoring from
+                <code>/proc</code>
+              </h3>
+
+              <p>
+                What actually sits behind the numbers shown by
+                familiar process-monitoring tools.
+              </p>
+            </div>
+
+            <span class="note-arrow" aria-hidden="true">↗</span>
+          </article>
+
+          <article class="note">
+            <div class="note-number">02</div>
+
+            <div class="note-content">
+              <p class="note-type">
+                Operating systems
+              </p>
+
+              <h3>
+                Understanding the Linux scheduler
+              </h3>
+
+              <p>
+                A deeper look at how the kernel decides where
+                processes spend their time.
+              </p>
+            </div>
+
+            <span class="note-arrow" aria-hidden="true">↗</span>
+          </article>
+
+          <article class="note">
+            <div class="note-number">03</div>
+
+            <div class="note-content">
+              <p class="note-type">
+                Systems
+              </p>
+
+              <h3>
+                What actually happens when a process runs
+              </h3>
+
+              <p>
+                Following execution through the layers of a modern
+                operating system.
+              </p>
+            </div>
+
+            <span class="note-arrow" aria-hidden="true">↗</span>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact-section" id="contact">
+      <div class="container contact-inner">
+        <p class="section-label">
+          Contact
+        </p>
+
+        <h2>
+          Follow the<br />
+          current.
+        </h2>
+
+        <p>
+          Difurrent is early. There is more being built than there is
+          being announced.
+        </p>
+
+        <a
+          class="button button-primary"
+          href="https://x.com/difurrent"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          @difurrent
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div>
+        <div class="footer-wordmark">
+          DIFURRENT
+        </div>
+
+        <p class="footer-tagline">
+          A different current.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#work">Work</a>
+        <a href="#writing">Writing</a>
+        <a href="#about">About</a>
+        <a
+          href="https://x.com/difurrent"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          X
+        </a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>Technology</span>
+      <span>© 2026 Difurrent</span>
+    </div>
+  </footer>
+
+  <!-- PROJECT DIALOG -->
+  <dialog
+    class="project-dialog"
+    id="procwatch-dialog"
+    aria-labelledby="procwatch-dialog-title"
+  >
+    <div class="dialog-inner">
+
+      <div class="dialog-header">
+        <span class="section-label">Selected work / 001</span>
+
+        <button
+          class="dialog-close"
+          type="button"
+          aria-label="Close project details"
+        >
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <div class="dialog-content">
+        <p class="project-kicker">
+          Systems engineering
+        </p>
+
+        <h2 id="procwatch-dialog-title">
+          ProcWatch
+        </h2>
+
+        <p class="dialog-lead">
+          A self-contained Linux process-monitoring tool written in C.
+        </p>
+
+        <p>
+          ProcWatch reconstructs process information directly from
+          Linux's <code>/proc</code> filesystem, the same kernel
+          interface used by familiar process-monitoring tools.
+        </p>
+
+        <p>
+          The project explores process enumeration, process metadata,
+          CPU utilisation, memory usage, process hierarchy, file
+          descriptors, and memory mappings without relying on external
+          process-listing utilities.
+        </p>
+
+        <div class="project-meta dialog-meta">
+          <span>C</span>
+          <span>Linux</span>
+          <span>Systems</span>
+          <span>/proc</span>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <span>Built from first principles.</span>
+
+        <button class="text-link dialog-close-button" type="button">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </dialog>
+
+</body>
+</html>
