@@ -1,0 +1,15 @@
+{
+  "name": "difurrent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Difurrent website and publishing system.",
+  "type": "module",
+  "scripts":  {
+    "build": "node scripts/build-content.js",
+    "dev": "node scripts/dev-server.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^16.1.2"
+  }
+}

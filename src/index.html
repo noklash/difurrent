@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <meta
+        name="description"
+        content="Difurrent is an independent technology company building software, infrastructure, AI systems, and experimental technology."
+    >
+
+    <meta name="theme-color" content="#f4f4f1">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Difurrent">
+    <meta
+        property="og:description"
+        content="A different current."
+    >
+    <meta property="og:url" content="https://difurrent.com/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Difurrent">
+    <meta
+        name="twitter:description"
+        content="A different current."
+    >
+
+    <title>Difurrent — A different current.</title>
+
+    <script>
+        (() => {
+            const systemTheme =
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+
+            let theme = systemTheme;
+
+            try {
+                const savedConsent =
+                    localStorage.getItem("difurrent-consent");
+
+                const consent = savedConsent
+                    ? JSON.parse(savedConsent)
+                    : null;
+
+                if (consent?.preferences === true) {
+                    const savedTheme =
+                        localStorage.getItem("difurrent-theme");
+
+                    if (
+                        savedTheme === "light" ||
+                        savedTheme === "dark"
+                    ) {
+                        theme = savedTheme;
+                    }
+                }
+            } catch {
+                // Fall back to system preference.
+            }
+
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/script.js" defer></script>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">
+    Skip to content
+</a>
+
+<header class="site-header">
+    <div class="container header-inner">
+
+        <a class="wordmark" href="/" aria-label="Difurrent home">
+            DIFURRENT
+        </a>
+
+        <nav class="desktop-nav" aria-label="Primary navigation">
+            <a href="/#work">Work</a>
+            <a href="/#about">About</a>
+            <a href="/articles/">Writing</a>
+            <a href="/#contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+
+            <button
+                class="theme-button"
+                type="button"
+                aria-label="Change theme"
+                aria-expanded="false"
+            >
+                <span class="theme-button-label">System</span>
+            </button>
+
+            <a
+                class="x-link"
+                href="https://x.com/difurrent"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                X
+            </a>
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+                aria-label="Open navigation"
+            >
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+    </div>
+
+    <div class="theme-menu" hidden>
+        <button type="button" data-theme-choice="system">
+            System
+        </button>
+
+        <button type="button" data-theme-choice="light">
+            Light
+        </button>
+
+        <button type="button" data-theme-choice="dark">
+            Dark
+        </button>
+    </div>
+
+    <nav
+        id="mobile-nav"
+        class="mobile-nav"
+        aria-label="Mobile navigation"
+        aria-hidden="true"
+    >
+        <a href="/#work">Work</a>
+        <a href="/#about">About</a>
+        <a href="/articles/">Writing</a>
+        <a href="/#contact">Contact</a>
+    </nav>
+</header>
+
+<main id="main">
+
+    <section class="hero">
+        <div class="container hero-grid">
+
+            <div class="hero-index">
+                <span>01</span>
+                <span>Technology company</span>
+            </div>
+
+            <div class="hero-content">
+
+                <p class="eyebrow">
+                    Independent technology company
+                </p>
+
+                <h1>
+                    A different current.
+                </h1>
+
+                <p class="hero-description">
+                    Difurrent builds technology, systems, and
+                    infrastructure for the way the world is moving.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="button button-primary" href="#work">
+                        Explore the work
+                    </a>
+
+                    <a class="button button-secondary" href="#about">
+                        About Difurrent
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="philosophy section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>02</span>
+                <span>Philosophy</span>
+            </div>
+
+            <div class="philosophy-grid">
+
+                <h2>
+                    Build differently.
+                    <br>
+                    Understand deeply.
+                </h2>
+
+                <div>
+                    <p>
+                        We think in systems based on first principles.
+                        We look beneath abstractions, question defaults,
+                        and build where existing solutions leave room
+                        for something better.
+                    </p>
+
+                    <p>
+                        Difurrent exists to explore what technology
+                        becomes when engineering, research, and
+                        experimentation are allowed to overlap.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="areas section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>03</span>
+                <span>Areas</span>
+            </div>
+
+            <div class="areas-grid">
+
+                <article class="area">
+                    <span class="area-number">01</span>
+                    <h3>Software</h3>
+                    <p>
+                        Products, tools, and software systems built
+                        around real problems.
+                    </p>
+                </article>
+
+                <article class="area">
+                    <span class="area-number">02</span>
+                    <h3>Infrastructure</h3>
+                    <p>
+                        Systems underneath the applications people
+                        interact with.
+                    </p>
+                </article>
+
+                <article class="area">
+                    <span class="area-number">03</span>
+                    <h3>AI Systems</h3>
+                    <p>
+                        Engineering intelligent systems and the
+                        infrastructure required to operate them.
+                    </p>
+                </article>
+
+                <article class="area">
+                    <span class="area-number">04</span>
+                    <h3>Experiments</h3>
+                    <p>
+                        Small investigations that may become larger
+                        systems.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="work" class="work section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>04</span>
+                <span>Selected work</span>
+            </div>
+
+            <article class="featured-project">
+
+                <div class="project-meta">
+                    <span>01</span>
+
+                    <div class="tag-list">
+                        <span>C</span>
+                        <span>Linux</span>
+                        <span>Systems</span>
+                        <span>/proc</span>
+                    </div>
+                </div>
+
+                <div class="project-content">
+
+                    <h2>ProcWatch</h2>
+
+                    <p>
+                        A Linux process monitoring tool built directly
+                        against the kernel's /proc interface.
+                    </p>
+
+                    <button
+                        class="text-button project-dialog-trigger"
+                        type="button"
+                    >
+                        View project
+                        <span>↗</span>
+                    </button>
+
+                </div>
+
+            </article>
+
+            <div class="project-grid">
+
+                <article class="project-placeholder">
+                    <span>02</span>
+                    <h3>Coming soon</h3>
+                </article>
+
+                <article class="project-placeholder">
+                    <span>03</span>
+                    <h3>Coming soon</h3>
+                </article>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="engineering-note section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>05</span>
+                <span>Field note</span>
+            </div>
+
+            <div class="engineering-grid">
+
+                <h2>
+                    We are interested in what happens
+                    underneath the abstraction.
+                </h2>
+
+                <div class="engineering-subjects">
+
+                    <span>Linux processes</span>
+                    <span>CPU scheduling</span>
+                    <span>Memory</span>
+                    <span>Networking</span>
+                    <span>Distributed systems</span>
+                    <span>Infrastructure</span>
+                    <span>AI systems</span>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>06</span>
+                <span>About</span>
+            </div>
+
+            <div class="about-grid">
+
+                <h2>
+                    A company built
+                    <br>
+                    to explore.
+                </h2>
+
+                <div>
+                    <p>
+                        Difurrent is an independent technology company
+                        exploring software, infrastructure, artificial
+                        intelligence, and systems engineering.
+                    </p>
+
+                    <p>
+                        The company exists to build things worth
+                        understanding.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="writing section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>07</span>
+                <span>Writing</span>
+            </div>
+
+            <div class="writing-header">
+                <h2>Notes from the current.</h2>
+
+                <a href="/articles/" class="text-button">
+                    All writing
+                    <span>↗</span>
+                </a>
+            </div>
+
+            <div class="article-grid">
+
+                <!-- ARTICLES:START -->
+
+                <p class="empty-state">
+                    No articles published yet.
+                </p>
+
+                <!-- ARTICLES:END -->
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contact" class="contact section">
+        <div class="container">
+
+            <div class="section-label">
+                <span>08</span>
+                <span>Contact</span>
+            </div>
+
+            <div class="contact-content">
+
+                <h2>
+                    Follow the current.
+                </h2>
+
+                <a
+                    class="contact-link"
+                    href="https://x.com/difurrent"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    @difurrent
+                    <span>↗</span>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+
+        <div>
+            <strong>DIFURRENT</strong>
+            <span>A different current.</span>
+        </div>
+
+        <div class="footer-links">
+            <a href="/#work">Work</a>
+            <a href="/articles/">Writing</a>
+            <a href="/#about">About</a>
+            <a href="/#contact">Contact</a>
+        </div>
+
+        <span>
+            © 2026 Difurrent
+        </span>
+
+    </div>
+</footer>
+
+<div
+    class="consent-banner"
+    data-consent-banner
+    hidden
+>
+    <div class="consent-inner">
+
+        <div>
+            <p class="consent-label">
+                Cookies & preferences
+            </p>
+
+            <p>
+                Difurrent uses necessary browser storage to remember
+                your choices. Optional preferences can remember things
+                such as your theme.
+            </p>
+        </div>
+
+        <div class="consent-actions">
+
+            <button
+                type="button"
+                class="button button-secondary"
+                data-consent-necessary
+            >
+                Necessary only
+            </button>
+
+            <button
+                type="button"
+                class="button button-secondary"
+                data-consent-manage
+            >
+                Manage
+            </button>
+
+            <button
+                type="button"
+                class="button button-primary"
+                data-consent-all
+            >
+                Accept all
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<div
+    class="consent-modal"
+    data-consent-modal
+    hidden
+>
+    <div class="consent-modal-backdrop"></div>
+
+    <section
+        class="consent-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="consent-title"
+    >
+
+        <div class="consent-dialog-header">
+
+            <div>
+                <span class="eyebrow">
+                    Privacy
+                </span>
+
+                <h2 id="consent-title">
+                    Cookies & preferences
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                class="dialog-close"
+                data-consent-close
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="consent-options">
+
+            <div class="consent-option">
+                <div>
+                    <strong>Necessary</strong>
+
+                    <p>
+                        Required for basic website operation and
+                        remembering consent.
+                    </p>
+                </div>
+
+                <span class="consent-required">
+                    Always on
+                </span>
+            </div>
+
+            <div class="consent-option">
+
+                <div>
+                    <strong>Preferences</strong>
+
+                    <p>
+                        Allows Difurrent to remember interface
+                        preferences such as your selected theme.
+                    </p>
+                </div>
+
+                <label class="switch">
+                    <input
+                        type="checkbox"
+                        data-consent-preferences
+                    >
+                    <span></span>
+                </label>
+
+            </div>
+
+            <div class="consent-option">
+
+                <div>
+                    <strong>Analytics</strong>
+
+                    <p>
+                        Optional measurement tools. Difurrent currently
+                        does not load third-party analytics.
+                    </p>
+                </div>
+
+                <label class="switch">
+                    <input
+                        type="checkbox"
+                        data-consent-analytics
+                    >
+                    <span></span>
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="consent-dialog-actions">
+
+            <button
+                type="button"
+                class="button button-secondary"
+                data-consent-close
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="button button-primary"
+                data-consent-save
+            >
+                Save preferences
+            </button>
+
+        </div>
+
+    </section>
+</div>
+
+<dialog class="project-dialog">
+
+    <button
+        class="dialog-close"
+        type="button"
+        aria-label="Close project"
+    >
+        ×
+    </button>
+
+    <div class="dialog-content">
+
+        <span class="eyebrow">
+            Systems / Linux
+        </span>
+
+        <h2>ProcWatch</h2>
+
+        <p class="dialog-lead">
+            A self-contained Linux process monitoring tool that
+            reconstructs process information directly from the
+            kernel's /proc filesystem.
+        </p>
+
+        <div class="dialog-body">
+
+            <p>
+                ProcWatch explores what actually happens underneath
+                familiar process monitoring tools.
+            </p>
+
+            <p>
+                Instead of invoking ps, top, or another external
+                process utility, the program reads Linux's /proc
+                interface directly.
+            </p>
+
+            <p>
+                The project covers process enumeration, metadata,
+                CPU utilisation, memory usage, filtering, sorting,
+                process hierarchy, file descriptors, and memory
+                mappings.
+            </p>
+
+        </div>
+
+        <div class="tag-list">
+            <span>C</span>
+            <span>Linux</span>
+            <span>/proc</span>
+            <span>Systems engineering</span>
+        </div>
+
+    </div>
+
+</dialog>
+
+</body>
+</html>
