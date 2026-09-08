@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 165" fill="none" shape-rendering="geometricPrecision">
+<rect width="100%" height="100%" fill="#0A0A0A"/>
+
+<g transform="translate(260 0) scale(.8)">
+  <g stroke="#FFFFFF" stroke-width="8" stroke-linecap="square" stroke-linejoin="round">
+<path d="M12 14H38C53 14 63 24 63 39" />
+<path d="M12 86H38C53 86 63 76 63 61" />
+<path d="M12 39H88" />
+<path d="M12 50H88" />
+<path d="M12 61H88" />
+</g>
+</g>
+<text x="310" y="118" text-anchor="middle"
+      font-family="Inter, Arial, sans-serif" font-size="42" font-weight="500"
+      letter-spacing="-1.5" fill="#FFFFFF">Difurrent</text>
+<text x="310" y="140" text-anchor="middle"
+      font-family="Inter, Arial, sans-serif" font-size="8.5" font-weight="500"
+      letter-spacing="3.4" fill="#FFFFFF">A DIFFERENT CURRENT.</text>
+
+</svg>
