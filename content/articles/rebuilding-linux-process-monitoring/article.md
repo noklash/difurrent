@@ -3,7 +3,7 @@ title: "memmap: Inspecting Linux Process Virtual Memory Through /proc"
 description: "A C-based systems tool that parses /proc maps and smaps to expose process virtual address space structure, residency, and demand-paging behavior."
 date: "2026-09-05"
 category: "Systems / Linux"
-author: "Difurrent"
+author: "Njoku Goodluck"
 cover: "./cover.webp"
 coverAlt: "Terminal output from memmap showing virtual memory mappings, RSS, and PSS for a Linux process."
 ---

@@ -3,7 +3,7 @@ title: "ProcWatch: Reconstructing Linux Process Monitoring from /proc"
 description: "A C systems project that rebuilds process monitoring by reading Linux /proc directly—enumerating PIDs, parsing stat and cmdline, deriving CPU utilization from samples, and handling races, virtual memory, and kernel interfaces."
 date: "2026-09-08"
 category: "Systems / Linux"
-author: "Difurrent"
+author: "Njoku Goodluck"
 cover: "./cover.webp"
 coverAlt: "Terminal output from ProcWatch listing processes with PID, PPID, state, threads, VSIZE, RSS, CPU%, and command."
 ---
