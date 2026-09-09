@@ -335,7 +335,7 @@ img {
 */
 
 .hero {
-    padding-block: 60px 180px;
+    padding-block: 60px 160px;
 }
 
 .hero-grid {
@@ -1879,7 +1879,7 @@ img {
     }
 
     .hero {
-        padding-block: 100px 120px;
+        padding-block: 40px 100px;
     }
 
     .section {
