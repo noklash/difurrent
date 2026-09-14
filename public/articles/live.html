@@ -1,18 +1,297 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Difurrent Article</title>
-  <meta name="description" content="Difurrent article">
-  <link rel="stylesheet" href="/styles.css">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.ico">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Difurrent Article</title>
+    <meta name="description" content="Difurrent article">
+    <meta name="theme-color" content="#f4f4f1">
+    <link rel="canonical" href="https://difurrent.com/articles/live.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Difurrent Article">
+    <meta property="og:description" content="Difurrent article">
+    <meta property="og:url" content="https://difurrent.com/articles/live.html">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Difurrent Article">
+    <meta name="twitter:description" content="Difurrent article">
+
+    <script>
+        (() => {
+            const systemTheme =
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light";
+            let theme = systemTheme;
+            try {
+                const savedConsent = localStorage.getItem("difurrent-consent");
+                const consent = savedConsent ? JSON.parse(savedConsent) : null;
+                if (consent?.preferences === true) {
+                    const savedTheme = localStorage.getItem("difurrent-theme");
+                    if (savedTheme === "light" || savedTheme === "dark") {
+                        theme = savedTheme;
+                    }
+                }
+            } catch {
+                // System theme remains active.
+            }
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/script.js" defer></script>
+    <script src="/notion-article.js" defer></script>
 </head>
-<body>
-  <main class="article-page">
-    <p><a href="/articles/">← Back to articles</a></p>
-    <article id="notion-article" class="article-content">Loading article...</article>
-  </main>
-  <script src="/script.js"></script>
-  <script src="/notion-article.js"></script>
+
+<body class="article-page">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="wordmark" href="/">DIFURRENT</a>
+
+        <nav class="desktop-nav" aria-label="Primary navigation">
+            <a href="/#work">Work</a>
+            <a href="/#about">About</a>
+            <a href="/articles/">Writing</a>
+            <a href="/#contact">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <button
+                class="theme-button"
+                type="button"
+                aria-label="Change theme"
+                aria-expanded="false"
+            >
+                <span class="theme-button-label">System</span>
+            </button>
+
+            <a
+                class="x-link"
+                href="https://x.com/difurrent"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                X
+            </a>
+
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+                aria-label="Open navigation"
+            >
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="theme-menu" hidden>
+        <button type="button" data-theme-choice="system">System</button>
+        <button type="button" data-theme-choice="light">Light</button>
+        <button type="button" data-theme-choice="dark">Dark</button>
+    </div>
+
+    <nav
+        id="mobile-nav"
+        class="mobile-nav"
+        aria-label="Mobile navigation"
+        aria-hidden="true"
+    >
+        <a href="/#work">Work</a>
+        <a href="/#about">About</a>
+        <a href="/articles/">Writing</a>
+        <a href="/#contact">Contact</a>
+    </nav>
+</header>
+
+<main id="main">
+    <article>
+        <header class="article-header">
+            <div class="container article-header-inner">
+                <a class="article-back" href="/articles/">← All writing</a>
+
+                <div class="article-meta">
+                    <span data-notion-category>Loading</span>
+                    <span>·</span>
+                    <time data-notion-date></time>
+                    <span>·</span>
+                    <span data-notion-reading-time></span>
+                </div>
+
+                <h1 data-notion-title>Loading article...</h1>
+
+                <p class="article-description" data-notion-description></p>
+
+                <p class="article-author" data-notion-author hidden></p>
+            </div>
+
+            <div data-notion-cover></div>
+        </header>
+
+        <div class="article-layout container">
+            <aside class="article-toc" data-article-toc>
+                <span class="toc-label">On this page</span>
+                <nav aria-label="Article contents">
+                    <div data-toc-list></div>
+                </nav>
+            </aside>
+
+            <div class="article-content" data-notion-content>
+                <p>Loading article content...</p>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div>
+            <strong>DIFURRENT</strong>
+            <span>A different current.</span>
+        </div>
+
+        <div class="footer-links">
+            <a href="/#work">Work</a>
+            <a href="/articles/">Writing</a>
+            <a href="/#about">About</a>
+            <a href="/#contact">Contact</a>
+        </div>
+
+        <span>© 2026 Difurrent</span>
+    </div>
+</footer>
+
+<div class="consent-banner" data-consent-banner hidden>
+    <div class="consent-inner">
+        <div>
+            <p class="consent-label">Cookies & preferences</p>
+            <p>
+                Difurrent uses necessary browser storage to remember
+                your choices. Optional preferences can remember things
+                such as your theme.
+            </p>
+        </div>
+
+        <div class="consent-actions">
+            <button
+                type="button"
+                class="button button-secondary"
+                data-consent-necessary
+            >
+                Necessary only
+            </button>
+            <button
+                type="button"
+                class="button button-secondary"
+                data-consent-manage
+            >
+                Manage
+            </button>
+            <button
+                type="button"
+                class="button button-primary"
+                data-consent-all
+            >
+                Accept all
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="consent-modal" data-consent-modal hidden>
+    <div class="consent-modal-backdrop"></div>
+
+    <section
+        class="consent-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="consent-title"
+    >
+        <div class="consent-dialog-header">
+            <div>
+                <span class="eyebrow">Privacy</span>
+                <h2 id="consent-title">Cookies & preferences</h2>
+            </div>
+
+            <button
+                type="button"
+                class="dialog-close"
+                data-consent-close
+                aria-label="Close"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="consent-options">
+            <div class="consent-option">
+                <div>
+                    <strong>Necessary</strong>
+                    <p>
+                        Required for basic website operation and
+                        remembering consent.
+                    </p>
+                </div>
+                <span class="consent-required">Always on</span>
+            </div>
+
+            <div class="consent-option">
+                <div>
+                    <strong>Preferences</strong>
+                    <p>
+                        Allows the site to remember interface
+                        preferences such as your selected theme.
+                    </p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" data-consent-preferences>
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="consent-option">
+                <div>
+                    <strong>Analytics</strong>
+                    <p>
+                        Optional measurement tools. Difurrent currently
+                        does not load third-party analytics.
+                    </p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" data-consent-analytics>
+                    <span></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="consent-dialog-actions">
+            <button
+                type="button"
+                class="button button-secondary"
+                data-consent-close
+            >
+                Cancel
+            </button>
+            <button
+                type="button"
+                class="button button-primary"
+                data-consent-save
+            >
+                Save preferences
+            </button>
+        </div>
+    </section>
+</div>
 </body>
 </html>
