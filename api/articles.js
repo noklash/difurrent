@@ -41,6 +41,20 @@ function fileUrl(propertyValue) {
   return file?.external?.url || file?.file?.url || '';
 }
 
+async function getDataSourceId() {
+  const database = await notion.databases.retrieve({
+    database_id: databaseId
+  });
+
+  const dataSource = database.data_sources?.[0];
+
+  if (!dataSource?.id) {
+    throw new Error('No Notion data source found for NOTION_DATABASE_ID');
+  }
+
+  return dataSource.id;
+}
+
 function mapArticle(page) {
   const properties = page.properties;
   const slug = rich(properties.Slug);
@@ -74,8 +88,10 @@ export default async function handler(req, res) {
       throw new Error('Missing NOTION_TOKEN or NOTION_DATABASE_ID');
     }
 
-    const response = await notion.databases.query({
-      database_id: databaseId,
+    const dataSourceId = await getDataSourceId();
+
+    const response = await notion.dataSources.query({
+      data_source_id: dataSourceId,
       filter: {
         and: [
           { property: 'Type', select: { equals: 'Website Article' } },
