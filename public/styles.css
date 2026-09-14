@@ -1542,3 +1542,266 @@ html[data-theme="light"] .button-primary:hover {
         transform: none;
     }
 }
+
+@media (max-width: 900px) {
+    .article-grid,
+    [data-notion-articles].article-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .article-card h3 {
+        margin-top: 34px;
+    }
+}
+
+@media (max-width: 680px) {
+    .article-grid,
+    .article-grid-large,
+    [data-notion-articles].article-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .article-card-content {
+        padding: 22px;
+    }
+
+    .article-card h3 {
+        margin-top: 30px;
+        font-size: 24px;
+    }
+
+    .article-card p {
+        font-size: 14px;
+    }
+
+    .article-card .text-button {
+        padding-top: 28px;
+    }
+
+    .empty-state {
+        padding: 32px 22px;
+    }
+}
+
+/* Live Notion article support */
+[data-notion-title],
+[data-notion-description],
+[data-notion-category],
+[data-notion-date],
+[data-notion-reading-time],
+[data-notion-content] {
+    transition: opacity 180ms ease;
+}
+
+.article-content[data-notion-content] {
+    min-height: 320px;
+}
+
+.article-content[data-notion-content] ul + ul,
+.article-content[data-notion-content] ol + ol {
+    margin-top: -24px;
+}
+
+.article-content[data-notion-content] pre code {
+    display: block;
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    white-space: pre;
+}
+
+.article-content[data-notion-content] figure {
+    margin: 44px 0;
+}
+
+.article-content[data-notion-content] figure img {
+    width: 100%;
+    height: auto;
+    max-height: 620px;
+    margin: 0 0 12px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    object-fit: contain;
+}
+
+.article-content[data-notion-content] figcaption:empty {
+    display: none;
+}
+
+.article-content[data-notion-content] blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+.article-hero,
+.article-header {
+    background:
+        radial-gradient(circle at 80% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 34%),
+        var(--bg);
+}
+
+
+/* Writing */
+.writing-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.writing-header h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(38px, 5vw, 66px);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    font-weight: 500;
+}
+
+.article-grid,
+[data-notion-articles].article-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+}
+
+.article-grid-large {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.article-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 100%;
+    background: var(--bg);
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        opacity 700ms var(--ease),
+        transform 700ms var(--ease),
+        background 180ms ease,
+        border-color 180ms ease;
+}
+
+.article-card.is-visible,
+.article-card.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.article-card:hover {
+    background: var(--surface);
+}
+
+.article-card a {
+    color: inherit;
+}
+
+.article-card-image,
+.article-card-cover {
+    display: block;
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background:
+        radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 28%),
+        linear-gradient(135deg, var(--surface), var(--surface-strong));
+}
+
+.article-card-image img,
+.article-card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms var(--ease), opacity 180ms ease;
+}
+
+.article-card:hover .article-card-image img,
+.article-card:hover .article-card-cover img {
+    transform: scale(1.025);
+}
+
+.article-card-image-empty {
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+}
+
+.article-card-image-empty span {
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 12px;
+}
+
+.article-card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: clamp(20px, 2vw, 28px);
+}
+
+.article-card-meta,
+.article-card-footer,
+.article-card .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--faint);
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.article-card h3 {
+    margin: 44px 0 15px;
+    font-family: var(--display);
+    font-size: clamp(22px, 2.2vw, 28px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+}
+
+.article-card h3 a {
+    display: inline;
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 220ms var(--ease), color 180ms ease;
+}
+
+.article-card:hover h3 a {
+    background-size: 100% 1px;
+}
+
+.article-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.article-card-footer {
+    margin-top: auto;
+    padding-top: 35px;
+}
+
+.article-card .text-button {
+    margin-top: auto;
+    padding-top: 34px;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    padding: 50px;
+    margin: 0;
+    color: var(--muted);
+    background: var(--bg);
+}

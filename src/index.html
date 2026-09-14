@@ -523,37 +523,32 @@
     </section>
 
     <section class="writing section">
-
-        <div class="container">
-
-            <div class="section-label">
-                <span>07</span>
-                <span>Writing</span>
-            </div>
-
-            <div class="writing-header">
-                <h2>Notes from the current.</h2>
-                <a href="/articles/" class="text-button">
-                    All writing
-                    <span>↗</span>
-                </a>
-            </div>
-
-            <div class="article-grid">
-                <!-- ARTICLES:START -->
-                <p class="empty-state">
-                    No articles published yet. Technical notes and
-                    field reports will appear here.
-                </p>
-                <!-- ARTICLES:END -->
-            </div>
-
-            <div data-notion-articles data-featured="true" data-limit="3"></div>
-            <script src="/notion-articles.js"></script>
-
+    <div class="container">
+        <div class="section-label">
+            <span>07</span>
+            <span>Writing</span>
         </div>
 
-    </section>
+        <div class="writing-header">
+            <h2>Notes from the current.</h2>
+            <a href="/articles/" class="text-button">
+                All writing
+                <span>↗</span>
+            </a>
+        </div>
+
+        <div
+            class="article-grid"
+            data-notion-articles
+            data-featured="true"
+            data-limit="3"
+        >
+            <p class="empty-state">
+                Loading articles...
+            </p>
+        </div>
+    </div>
+</section>
 
     <section id="contact" class="contact section">
 
@@ -825,6 +820,6 @@
         </div>
     </div>
 </dialog>
-
+<script src="/notion-articles.js" defer></script>
 </body>
 </html>
