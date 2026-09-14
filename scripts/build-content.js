@@ -1776,6 +1776,26 @@ function buildHomepage() {
             HOMEPAGE_TEMPLATE
         );
 
+    if (
+        homepage.includes(
+            "data-notion-articles"
+        )
+    ) {
+        writeFile(
+            path.join(
+                DIST_DIR,
+                "index.html"
+            ),
+            homepage
+        );
+
+        log(
+            "  ✓ Homepage (live Notion articles)"
+        );
+
+        return;
+    }
+
     const startMarker =
         "<!-- ARTICLES:START -->";
 
@@ -1856,17 +1876,9 @@ ${after}`;
 */
 
 function renderArticlesIndex() {
-    const cards =
-        articles.length > 0
-            ? articles
-                  .map(
-                      renderArticleCard
-                  )
-                  .join("\n")
-            : `
-<p class="empty-state">
-    No articles published yet.
-</p>
+    const cards = `
+<div data-notion-articles data-limit="12"></div>
+<script src="/notion-articles.js"></script>
 `;
 
     return `<!DOCTYPE html>

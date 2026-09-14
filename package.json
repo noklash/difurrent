@@ -4,12 +4,16 @@
   "private": true,
   "description": "Difurrent website and publishing system.",
   "type": "module",
-  "scripts":  {
+  "scripts": {
     "build": "node scripts/build-content.js",
     "dev": "node scripts/dev-server.js"
   },
   "dependencies": {
+    "@notionhq/client": "^5.26.0",
     "gray-matter": "^4.0.3",
     "marked": "^16.1.2"
+  },
+  "devDependencies": {
+    "vercel": "^59.16.0"
   }
 }
