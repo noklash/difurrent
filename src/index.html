@@ -139,7 +139,7 @@
             <button
                 class="theme-button"
                 type="button"
-                aria-label="Change theme"
+                aria-label="Change color theme"
                 aria-expanded="false"
             >
                 <span class="theme-button-label">System</span>
@@ -254,13 +254,19 @@
 
             </div>
 
-            <div class="hero-system" aria-hidden="true">
+            <div class="hero-system" aria-hidden="true" data-system-visual>
                 <div class="system-frame">
                     <div class="system-header">
                         <span>SYS / 001</span>
-                        <span>LIVE STRUCTURE</span>
+                        <span><i class="status-dot"></i> LIVE STRUCTURE</span>
                     </div>
                     <div class="system-map">
+                        <span class="system-scanline"></span>
+                        <span class="system-label system-label-a">APP</span>
+                        <span class="system-label system-label-b">NET</span>
+                        <span class="system-label system-label-c">CPU</span>
+                        <span class="system-label system-label-d">MEM</span>
+                        <span class="system-label system-label-e">AI</span>
                         <span class="node node-a"></span>
                         <span class="node node-b"></span>
                         <span class="node node-c"></span>
@@ -392,7 +398,7 @@
                 <span>Selected work</span>
             </div>
 
-            <article class="featured-project">
+            <article class="featured-project" tabindex="0" aria-label="ProcWatch project">
 
                 <div class="project-meta">
                     <span>01</span>
@@ -424,22 +430,30 @@
 
             <div class="project-grid">
 
-                <article class="project-placeholder">
-                    <span>02</span>
+                <article class="project-placeholder project-placeholder--active">
+                    <div class="placeholder-top">
+                        <span>02</span>
+                        <span class="project-status">IN PROGRESS</span>
+                    </div>
                     <h3>Systems tooling</h3>
                     <p class="placeholder-note">
-                        Additional systems and infrastructure work
-                        in progress.
+                        Infrastructure and systems experiments moving
+                        toward production-grade tooling.
                     </p>
+                    <span class="placeholder-arrow" aria-hidden="true">↗</span>
                 </article>
 
-                <article class="project-placeholder">
-                    <span>03</span>
+                <article class="project-placeholder project-placeholder--active">
+                    <div class="placeholder-top">
+                        <span>03</span>
+                        <span class="project-status">EXPLORING</span>
+                    </div>
                     <h3>AI infrastructure</h3>
                     <p class="placeholder-note">
-                        Experiments around models, serving, and
-                        operational pipelines.
+                        Experiments around models, serving, inference,
+                        and operational pipelines.
                     </p>
+                    <span class="placeholder-arrow" aria-hidden="true">↗</span>
                 </article>
 
             </div>

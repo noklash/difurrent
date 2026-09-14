@@ -2,23 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.ico">
-    <link rel="icon" type="image/png" href="/assets/favicon/favicon.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Difurrent Article</title>
-    <meta name="description" content="Difurrent article">
-    <meta name="theme-color" content="#f4f4f1">
+    <meta name="description" content="Notes and writing from Difurrent.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Difurrent">
+
     <link rel="canonical" href="https://difurrent.com/articles/live.html">
 
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="Difurrent Article">
-    <meta property="og:description" content="Difurrent article">
-    <meta property="og:url" content="https://difurrent.com/articles/live.html">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg">
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.ico">
+    <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
 
+    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Difurrent">
+    <meta property="og:title" content="Difurrent Article">
+    <meta property="og:description" content="Notes and writing from Difurrent.">
+    <meta property="og:url" content="https://difurrent.com/articles/live.html">
+    <meta property="og:locale" content="en_US">
+
+    <!-- X / Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@difurrent">
     <meta name="twitter:title" content="Difurrent Article">
-    <meta name="twitter:description" content="Difurrent article">
+    <meta name="twitter:description" content="Notes and writing from Difurrent.">
 
     <script>
         (() => {
@@ -26,10 +38,13 @@
                 window.matchMedia("(prefers-color-scheme: dark)").matches
                     ? "dark"
                     : "light";
+
             let theme = systemTheme;
+
             try {
                 const savedConsent = localStorage.getItem("difurrent-consent");
                 const consent = savedConsent ? JSON.parse(savedConsent) : null;
+
                 if (consent?.preferences === true) {
                     const savedTheme = localStorage.getItem("difurrent-theme");
                     if (savedTheme === "light" || savedTheme === "dark") {
@@ -37,8 +52,9 @@
                     }
                 }
             } catch {
-                // System theme remains active.
+                // Fall back to system preference.
             }
+
             document.documentElement.dataset.theme = theme;
         })();
     </script>
@@ -49,11 +65,14 @@
 </head>
 
 <body class="article-page">
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
     <div class="container header-inner">
-        <a class="wordmark" href="/">DIFURRENT</a>
+        <a class="wordmark" href="/" aria-label="Difurrent home">
+            DIFURRENT
+        </a>
 
         <nav class="desktop-nav" aria-label="Primary navigation">
             <a href="/#work">Work</a>
@@ -77,8 +96,19 @@
                 href="https://x.com/difurrent"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Difurrent on X"
             >
                 X
+            </a>
+
+            <a
+                class="social-link"
+                href="https://www.linkedin.com/company/difurrent/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Difurrent on LinkedIn"
+            >
+                in
             </a>
 
             <button
@@ -110,6 +140,20 @@
         <a href="/#about">About</a>
         <a href="/articles/">Writing</a>
         <a href="/#contact">Contact</a>
+        <a
+            href="https://x.com/difurrent"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            X / Twitter
+        </a>
+        <a
+            href="https://www.linkedin.com/company/difurrent/"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            LinkedIn
+        </a>
     </nav>
 </header>
 
@@ -117,24 +161,26 @@
     <article>
         <header class="article-header">
             <div class="container article-header-inner">
-                <a class="article-back" href="/articles/">← All writing</a>
+                <a class="article-back" href="/articles/">
+                    ← All writing
+                </a>
 
                 <div class="article-meta">
                     <span data-notion-category>Loading</span>
-                    <span>·</span>
-                    <time data-notion-date></time>
-                    <span>·</span>
+                    <span aria-hidden="true">·</span>
+                    <time data-notion-date datetime=""></time>
+                    <span aria-hidden="true">·</span>
                     <span data-notion-reading-time></span>
                 </div>
 
-                <h1 data-notion-title>Loading article...</h1>
+                <h1 data-notion-title>Loading article…</h1>
 
                 <p class="article-description" data-notion-description></p>
 
                 <p class="article-author" data-notion-author hidden></p>
             </div>
 
-            <div data-notion-cover></div>
+            <div class="article-cover" data-notion-cover></div>
         </header>
 
         <div class="article-layout container">
@@ -146,7 +192,7 @@
             </aside>
 
             <div class="article-content" data-notion-content>
-                <p>Loading article content...</p>
+                <p>Loading article content…</p>
             </div>
         </div>
     </article>
@@ -164,6 +210,20 @@
             <a href="/articles/">Writing</a>
             <a href="/#about">About</a>
             <a href="/#contact">Contact</a>
+            <a
+                href="https://www.linkedin.com/company/difurrent/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                LinkedIn
+            </a>
+            <a
+                href="https://x.com/difurrent"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                X
+            </a>
         </div>
 
         <span>© 2026 Difurrent</span>
@@ -293,5 +353,6 @@
         </div>
     </section>
 </div>
+
 </body>
 </html>
