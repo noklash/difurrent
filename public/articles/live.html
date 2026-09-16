@@ -4,34 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Difurrent Article</title>
-    <meta name="description" content="Notes and writing from Difurrent.">
+    <title>Difurrent Writing</title>
+    <meta
+        name="description"
+        content="Technical writing and field notes from Difurrent on software, infrastructure, systems engineering, AI systems, and experiments."
+    >
     <meta name="robots" content="index, follow">
     <meta name="author" content="Difurrent">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="color-scheme" content="dark light">
 
-    <link rel="canonical" href="https://difurrent.com/articles/live.html">
+    <link
+        rel="canonical"
+        href="https://difurrent.com/articles/live.html"
+    >
 
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg">
-    <link rel="icon" type="image/png" href="/assets/favicon/favicon.ico">
-    <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="/assets/favicon/favicon.svg"
+    >
+    <link
+        rel="icon"
+        href="/assets/favicon/favicon.ico"
+    >
+    <link
+        rel="apple-touch-icon"
+        href="/assets/favicon/apple-touch-icon.png"
+    >
 
-    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+    <meta
+        name="theme-color"
+        content="#0A0A0A"
+        media="(prefers-color-scheme: dark)"
+    >
+    <meta
+        name="theme-color"
+        content="#FFFFFF"
+        media="(prefers-color-scheme: light)"
+    >
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Difurrent">
-    <meta property="og:title" content="Difurrent Article">
-    <meta property="og:description" content="Notes and writing from Difurrent.">
-    <meta property="og:url" content="https://difurrent.com/articles/live.html">
+    <meta property="og:title" content="Difurrent Writing">
+    <meta
+        property="og:description"
+        content="Technical writing and field notes from Difurrent."
+    >
+    <meta
+        property="og:url"
+        content="https://difurrent.com/articles/live.html"
+    >
     <meta property="og:locale" content="en_US">
 
     <!-- X / Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@difurrent">
-    <meta name="twitter:title" content="Difurrent Article">
-    <meta name="twitter:description" content="Notes and writing from Difurrent.">
+    <meta name="twitter:title" content="Difurrent Writing">
+    <meta
+        name="twitter:description"
+        content="Technical writing and field notes from Difurrent."
+    >
 
+    <!-- Theme bootstrap -->
     <script>
         (() => {
             const systemTheme =
@@ -42,17 +78,26 @@
             let theme = systemTheme;
 
             try {
-                const savedConsent = localStorage.getItem("difurrent-consent");
-                const consent = savedConsent ? JSON.parse(savedConsent) : null;
+                const savedConsent =
+                    localStorage.getItem("difurrent-consent");
+
+                const consent = savedConsent
+                    ? JSON.parse(savedConsent)
+                    : null;
 
                 if (consent?.preferences === true) {
-                    const savedTheme = localStorage.getItem("difurrent-theme");
-                    if (savedTheme === "light" || savedTheme === "dark") {
+                    const savedTheme =
+                        localStorage.getItem("difurrent-theme");
+
+                    if (
+                        savedTheme === "light" ||
+                        savedTheme === "dark"
+                    ) {
                         theme = savedTheme;
                     }
                 }
             } catch {
-                // Fall back to system preference.
+                // Use the system theme if browser storage is unavailable.
             }
 
             document.documentElement.dataset.theme = theme;
@@ -60,6 +105,7 @@
     </script>
 
     <link rel="stylesheet" href="/styles.css">
+
     <script src="/script.js" defer></script>
     <script src="/notion-article.js" defer></script>
 </head>
@@ -70,23 +116,38 @@
 
 <header class="site-header">
     <div class="container header-inner">
-        <a class="wordmark" href="/" aria-label="Difurrent home">
+
+        <a
+            class="wordmark"
+            href="/"
+            aria-label="Difurrent home"
+        >
             DIFURRENT
         </a>
 
-        <nav class="desktop-nav" aria-label="Primary navigation">
+        <nav
+            class="desktop-nav"
+            aria-label="Primary navigation"
+        >
             <a href="/#work">Work</a>
             <a href="/#about">About</a>
-            <a href="/articles/">Writing</a>
+            <a
+                href="/articles/"
+                aria-current="page"
+            >
+                Writing
+            </a>
             <a href="/#contact">Contact</a>
         </nav>
 
         <div class="header-actions">
+
             <button
                 class="theme-button"
                 type="button"
                 aria-label="Change theme"
                 aria-expanded="false"
+                aria-haspopup="menu"
             >
                 <span class="theme-button-label">System</span>
             </button>
@@ -121,13 +182,39 @@
                 <span></span>
                 <span></span>
             </button>
+
         </div>
     </div>
 
-    <div class="theme-menu" hidden>
-        <button type="button" data-theme-choice="system">System</button>
-        <button type="button" data-theme-choice="light">Light</button>
-        <button type="button" data-theme-choice="dark">Dark</button>
+    <div
+        class="theme-menu"
+        role="menu"
+        aria-label="Theme selection"
+        hidden
+    >
+        <button
+            type="button"
+            role="menuitemradio"
+            data-theme-choice="system"
+        >
+            System
+        </button>
+
+        <button
+            type="button"
+            role="menuitemradio"
+            data-theme-choice="light"
+        >
+            Light
+        </button>
+
+        <button
+            type="button"
+            role="menuitemradio"
+            data-theme-choice="dark"
+        >
+            Dark
+        </button>
     </div>
 
     <nav
@@ -138,8 +225,14 @@
     >
         <a href="/#work">Work</a>
         <a href="/#about">About</a>
-        <a href="/articles/">Writing</a>
+        <a
+            href="/articles/"
+            aria-current="page"
+        >
+            Writing
+        </a>
         <a href="/#contact">Contact</a>
+
         <a
             href="https://x.com/difurrent"
             target="_blank"
@@ -147,6 +240,7 @@
         >
             X / Twitter
         </a>
+
         <a
             href="https://www.linkedin.com/company/difurrent/"
             target="_blank"
@@ -158,48 +252,99 @@
 </header>
 
 <main id="main">
+
     <article>
+
         <header class="article-header">
+
             <div class="container article-header-inner">
-                <a class="article-back" href="/articles/">
-                    ← All writing
+
+                <a
+                    class="article-back"
+                    href="/articles/"
+                >
+                    <span aria-hidden="true">←</span>
+                    All writing
                 </a>
 
-                <div class="article-meta">
-                    <span data-notion-category>Loading</span>
+                <div
+                    class="article-meta"
+                    aria-label="Article information"
+                >
+                    <span data-notion-category>
+                        Loading
+                    </span>
+
                     <span aria-hidden="true">·</span>
-                    <time data-notion-date datetime=""></time>
+
+                    <time
+                        data-notion-date
+                        datetime=""
+                    ></time>
+
                     <span aria-hidden="true">·</span>
+
                     <span data-notion-reading-time></span>
                 </div>
 
-                <h1 data-notion-title>Loading article…</h1>
+                <h1 data-notion-title>
+                    Loading article…
+                </h1>
 
-                <p class="article-description" data-notion-description></p>
+                <p
+                    class="article-description"
+                    data-notion-description
+                ></p>
 
-                <p class="article-author" data-notion-author hidden></p>
+                <p
+                    class="article-author"
+                    data-notion-author
+                    hidden
+                ></p>
+
             </div>
 
-            <div class="article-cover" data-notion-cover></div>
+            <div
+                class="article-cover"
+                data-notion-cover
+                aria-hidden="true"
+            ></div>
+
         </header>
 
         <div class="article-layout container">
-            <aside class="article-toc" data-article-toc>
-                <span class="toc-label">On this page</span>
+
+            <aside
+                class="article-toc"
+                data-article-toc
+                aria-label="Article contents"
+            >
+                <span class="toc-label">
+                    On this page
+                </span>
+
                 <nav aria-label="Article contents">
                     <div data-toc-list></div>
                 </nav>
             </aside>
 
-            <div class="article-content" data-notion-content>
+            <div
+                class="article-content"
+                data-notion-content
+            >
                 <p>Loading article content…</p>
             </div>
+
         </div>
+
     </article>
+
 </main>
 
 <footer class="site-footer">
+
     <div class="container footer-inner">
+
         <div>
             <strong>DIFURRENT</strong>
             <span>A different current.</span>
@@ -210,6 +355,7 @@
             <a href="/articles/">Writing</a>
             <a href="/#about">About</a>
             <a href="/#contact">Contact</a>
+
             <a
                 href="https://www.linkedin.com/company/difurrent/"
                 target="_blank"
@@ -217,6 +363,7 @@
             >
                 LinkedIn
             </a>
+
             <a
                 href="https://x.com/difurrent"
                 target="_blank"
@@ -227,13 +374,24 @@
         </div>
 
         <span>© 2026 Difurrent</span>
+
     </div>
+
 </footer>
 
-<div class="consent-banner" data-consent-banner hidden>
+<!-- Consent banner -->
+<div
+    class="consent-banner"
+    data-consent-banner
+    hidden
+>
     <div class="consent-inner">
+
         <div>
-            <p class="consent-label">Cookies & preferences</p>
+            <p class="consent-label">
+                Cookies & preferences
+            </p>
+
             <p>
                 Difurrent uses necessary browser storage to remember
                 your choices. Optional preferences can remember things
@@ -242,6 +400,7 @@
         </div>
 
         <div class="consent-actions">
+
             <button
                 type="button"
                 class="button button-secondary"
@@ -249,6 +408,7 @@
             >
                 Necessary only
             </button>
+
             <button
                 type="button"
                 class="button button-secondary"
@@ -256,6 +416,7 @@
             >
                 Manage
             </button>
+
             <button
                 type="button"
                 class="button button-primary"
@@ -263,11 +424,18 @@
             >
                 Accept all
             </button>
+
         </div>
+
     </div>
 </div>
 
-<div class="consent-modal" data-consent-modal hidden>
+<!-- Consent modal -->
+<div
+    class="consent-modal"
+    data-consent-modal
+    hidden
+>
     <div class="consent-modal-backdrop"></div>
 
     <section
@@ -276,37 +444,54 @@
         aria-modal="true"
         aria-labelledby="consent-title"
     >
+
         <div class="consent-dialog-header">
+
             <div>
-                <span class="eyebrow">Privacy</span>
-                <h2 id="consent-title">Cookies & preferences</h2>
+                <span class="eyebrow">
+                    Privacy
+                </span>
+
+                <h2 id="consent-title">
+                    Cookies & preferences
+                </h2>
             </div>
 
             <button
                 type="button"
                 class="dialog-close"
                 data-consent-close
-                aria-label="Close"
+                aria-label="Close preferences"
             >
                 ×
             </button>
+
         </div>
 
         <div class="consent-options">
+
             <div class="consent-option">
+
                 <div>
                     <strong>Necessary</strong>
+
                     <p>
                         Required for basic website operation and
                         remembering consent.
                     </p>
                 </div>
-                <span class="consent-required">Always on</span>
+
+                <span class="consent-required">
+                    Always on
+                </span>
+
             </div>
 
             <div class="consent-option">
+
                 <div>
                     <strong>Preferences</strong>
+
                     <p>
                         Allows the site to remember interface
                         preferences such as your selected theme.
@@ -314,14 +499,20 @@
                 </div>
 
                 <label class="switch">
-                    <input type="checkbox" data-consent-preferences>
+                    <input
+                        type="checkbox"
+                        data-consent-preferences
+                    >
                     <span></span>
                 </label>
+
             </div>
 
             <div class="consent-option">
+
                 <div>
                     <strong>Analytics</strong>
+
                     <p>
                         Optional measurement tools. Difurrent currently
                         does not load third-party analytics.
@@ -329,13 +520,19 @@
                 </div>
 
                 <label class="switch">
-                    <input type="checkbox" data-consent-analytics>
+                    <input
+                        type="checkbox"
+                        data-consent-analytics
+                    >
                     <span></span>
                 </label>
+
             </div>
+
         </div>
 
         <div class="consent-dialog-actions">
+
             <button
                 type="button"
                 class="button button-secondary"
@@ -343,6 +540,7 @@
             >
                 Cancel
             </button>
+
             <button
                 type="button"
                 class="button button-primary"
@@ -350,7 +548,9 @@
             >
                 Save preferences
             </button>
+
         </div>
+
     </section>
 </div>
 

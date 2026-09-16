@@ -8,7 +8,7 @@
 
     <meta
         name="description"
-        content="Difurrent is an independent technology company building software, infrastructure, AI systems, and experimental technology. Engineering systems beneath modern software."
+        content="Difurrent is an independent technology company building software, infrastructure, AI systems, and experimental technology."
     >
 
     <meta
@@ -17,18 +17,46 @@
     >
 
     <meta name="robots" content="index, follow">
-    <meta name="author" content="Difurrent">
+    <meta name="author" content="Difurrent Ltd">
+    <meta name="theme-color" content="#0A0A0A">
 
     <link rel="canonical" href="https://difurrent.com/">
 
     <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg">
-    <link rel="icon" type="image/png" href="/assets/favicon/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
     <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
 
-    <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+    <!-- Prevent theme flash -->
+    <script>
+        (() => {
+            const root = document.documentElement;
+            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
 
-    <!-- Organization structured data -->
+            let theme = systemTheme;
+
+            try {
+                const consent = JSON.parse(
+                    localStorage.getItem("difurrent-consent") || "null"
+                );
+
+                if (consent?.preferences === true) {
+                    const savedTheme = localStorage.getItem("difurrent-theme");
+
+                    if (savedTheme === "light" || savedTheme === "dark") {
+                        theme = savedTheme;
+                    }
+                }
+            } catch {
+                // System preference remains the fallback.
+            }
+
+            root.dataset.theme = theme;
+        })();
+    </script>
+
+    <!-- Organization -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -47,6 +75,20 @@
     }
     </script>
 
+    <!-- Website -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://difurrent.com/#website",
+        "url": "https://difurrent.com/",
+        "name": "Difurrent",
+        "publisher": {
+            "@id": "https://difurrent.com/#organization"
+        }
+    }
+    </script>
+
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Difurrent">
@@ -59,9 +101,10 @@
     <meta property="og:image" content="https://difurrent.com/assets/og/difurrent.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Difurrent">
     <meta property="og:locale" content="en_US">
 
-    <!-- X / Twitter -->
+    <!-- X -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@difurrent">
     <meta name="twitter:title" content="Difurrent | Independent Technology Company">
@@ -70,45 +113,12 @@
         content="Difurrent is an independent technology company building software, infrastructure, AI systems, and experimental technology."
     >
     <meta name="twitter:image" content="https://difurrent.com/assets/og/difurrent.jpg">
-
-    <script>
-        (() => {
-            const systemTheme =
-                window.matchMedia("(prefers-color-scheme: dark)").matches
-                    ? "dark"
-                    : "light";
-
-            let theme = systemTheme;
-
-            try {
-                const savedConsent =
-                    localStorage.getItem("difurrent-consent");
-
-                const consent = savedConsent
-                    ? JSON.parse(savedConsent)
-                    : null;
-
-                if (consent?.preferences === true) {
-                    const savedTheme =
-                        localStorage.getItem("difurrent-theme");
-
-                    if (
-                        savedTheme === "light" ||
-                        savedTheme === "dark"
-                    ) {
-                        theme = savedTheme;
-                    }
-                }
-            } catch {
-                // Fall back to system preference.
-            }
-
-            document.documentElement.dataset.theme = theme;
-        })();
-    </script>
+    <meta name="twitter:image:alt" content="Difurrent">
 
     <link rel="stylesheet" href="/styles.css">
+
     <script src="/script.js" defer></script>
+    <script src="/notion-articles.js" defer></script>
 </head>
 
 <body>
@@ -118,9 +128,14 @@
 </a>
 
 <header class="site-header">
+
     <div class="container header-inner">
 
-        <a class="wordmark" href="/" aria-label="Difurrent home">
+        <a
+            class="wordmark"
+            href="/"
+            aria-label="Difurrent home"
+        >
             DIFURRENT
         </a>
 
@@ -139,7 +154,8 @@
             <button
                 class="theme-button"
                 type="button"
-                aria-label="Change theme"
+                aria-label="Change color theme"
+                aria-haspopup="menu"
                 aria-expanded="false"
             >
                 <span class="theme-button-label">System</span>
@@ -175,18 +191,36 @@
                 <span></span>
                 <span></span>
             </button>
-        </div>
 
+        </div>
     </div>
 
-    <div class="theme-menu" hidden>
-        <button type="button" data-theme-choice="system">
+    <div
+        class="theme-menu"
+        role="menu"
+        hidden
+    >
+        <button
+            type="button"
+            role="menuitem"
+            data-theme-choice="system"
+        >
             System
         </button>
-        <button type="button" data-theme-choice="light">
+
+        <button
+            type="button"
+            role="menuitem"
+            data-theme-choice="light"
+        >
             Light
         </button>
-        <button type="button" data-theme-choice="dark">
+
+        <button
+            type="button"
+            role="menuitem"
+            data-theme-choice="dark"
+        >
             Dark
         </button>
     </div>
@@ -201,6 +235,7 @@
         <a href="/#about">About</a>
         <a href="/articles/">Writing</a>
         <a href="/#contact">Contact</a>
+
         <a
             href="https://x.com/difurrent"
             target="_blank"
@@ -208,6 +243,7 @@
         >
             X / Twitter
         </a>
+
         <a
             href="https://www.linkedin.com/company/difurrent/"
             target="_blank"
@@ -216,10 +252,12 @@
             LinkedIn
         </a>
     </nav>
+
 </header>
 
 <main id="main">
 
+    <!-- HERO -->
     <section class="hero">
 
         <div class="container hero-grid">
@@ -244,40 +282,57 @@
                 </p>
 
                 <div class="hero-actions">
-                    <a class="button button-primary" href="#work">
+                    <a
+                        class="button button-primary"
+                        href="#work"
+                    >
                         Explore the work
                     </a>
-                    <a class="button button-secondary" href="#about">
+
+                    <a
+                        class="button button-secondary"
+                        href="#about"
+                    >
                         About Difurrent
                     </a>
                 </div>
 
             </div>
 
-            <div class="hero-system" aria-hidden="true">
+            <div
+                class="hero-system"
+                aria-hidden="true"
+            >
                 <div class="system-frame">
+
                     <div class="system-header">
                         <span>SYS / 001</span>
                         <span>LIVE STRUCTURE</span>
                     </div>
+
                     <div class="system-map">
+
                         <span class="node node-a"></span>
                         <span class="node node-b"></span>
                         <span class="node node-c"></span>
                         <span class="node node-d"></span>
                         <span class="node node-e"></span>
+
                         <span class="trace trace-a"></span>
                         <span class="trace trace-b"></span>
                         <span class="trace trace-c"></span>
                         <span class="trace trace-d"></span>
                         <span class="trace trace-e"></span>
+
                     </div>
+
                     <div class="system-footer">
                         <span>SOFTWARE</span>
                         <span>NETWORK</span>
                         <span>COMPUTE</span>
                         <span>AI</span>
                     </div>
+
                 </div>
             </div>
 
@@ -285,6 +340,8 @@
 
     </section>
 
+
+    <!-- PHILOSOPHY -->
     <section class="philosophy section">
 
         <div class="container">
@@ -301,23 +358,27 @@
                     Understand deeply.
                 </h2>
 
-                <div>
+                <div class="copy-column">
+
                     <p>
                         We think in systems grounded in first principles.
                         We look beneath abstractions, question defaults,
                         and build where existing solutions leave room
                         for something better.
                     </p>
+
                     <p>
                         Difurrent exists to explore what technology becomes
                         when engineering, research, and experimentation are
-                        allowed to overlap—without the pressure to ship
+                        allowed to overlap, without the pressure to ship
                         before understanding.
                     </p>
-                    <p>
+
+                    <p class="copy-emphasis">
                         Clarity over complexity. Depth over surface.
                         Systems that last.
                     </p>
+
                 </div>
 
             </div>
@@ -326,6 +387,8 @@
 
     </section>
 
+
+    <!-- AREAS -->
     <section class="areas section">
 
         <div class="container">
@@ -339,17 +402,21 @@
 
                 <article class="area">
                     <span class="area-number">01</span>
+
                     <h3>Software</h3>
+
                     <p>
                         Products, tools, and software systems built
-                        around real problems—from interfaces to the
+                        around real problems, from interfaces to the
                         layers that support them.
                     </p>
                 </article>
 
                 <article class="area">
                     <span class="area-number">02</span>
+
                     <h3>Infrastructure</h3>
+
                     <p>
                         The systems underneath the applications people
                         interact with: compute, networking, storage,
@@ -359,7 +426,9 @@
 
                 <article class="area">
                     <span class="area-number">03</span>
+
                     <h3>AI Systems</h3>
+
                     <p>
                         Engineering intelligent systems and the
                         infrastructure required to train, serve, and
@@ -369,10 +438,12 @@
 
                 <article class="area">
                     <span class="area-number">04</span>
+
                     <h3>Experiments</h3>
+
                     <p>
                         Small investigations and prototypes that may
-                        become larger systems—or simply deepen our
+                        become larger systems, or simply deepen our
                         understanding of the stack.
                     </p>
                 </article>
@@ -383,7 +454,12 @@
 
     </section>
 
-    <section id="work" class="work section">
+
+    <!-- WORK -->
+    <section
+        id="work"
+        class="work section"
+    >
 
         <div class="container">
 
@@ -395,29 +471,40 @@
             <article class="featured-project">
 
                 <div class="project-meta">
+
                     <span>01</span>
+
                     <div class="tag-list">
                         <span>C</span>
                         <span>Linux</span>
                         <span>Systems</span>
                         <span>/proc</span>
                     </div>
+
                 </div>
 
                 <div class="project-content">
+
+                    <p class="project-kicker">
+                        Systems engineering / Linux
+                    </p>
+
                     <h2>ProcWatch</h2>
+
                     <p>
                         A Linux process monitoring tool built directly
-                        against the kernel’s /proc interface—without
+                        against the kernel's /proc interface, without
                         relying on ps, top, or external utilities.
                     </p>
+
                     <button
                         class="text-button project-dialog-trigger"
                         type="button"
                     >
                         View project
-                        <span>↗</span>
+                        <span aria-hidden="true">↗</span>
                     </button>
+
                 </div>
 
             </article>
@@ -426,8 +513,10 @@
 
                 <article class="project-placeholder">
                     <span>02</span>
+
                     <h3>Systems tooling</h3>
-                    <p class="placeholder-note">
+
+                    <p>
                         Additional systems and infrastructure work
                         in progress.
                     </p>
@@ -435,8 +524,10 @@
 
                 <article class="project-placeholder">
                     <span>03</span>
+
                     <h3>AI infrastructure</h3>
-                    <p class="placeholder-note">
+
+                    <p>
                         Experiments around models, serving, and
                         operational pipelines.
                     </p>
@@ -448,6 +539,8 @@
 
     </section>
 
+
+    <!-- FIELD NOTE -->
     <section class="engineering-note section">
 
         <div class="container">
@@ -481,7 +574,12 @@
 
     </section>
 
-    <section id="about" class="about section">
+
+    <!-- ABOUT -->
+    <section
+        id="about"
+        class="about section"
+    >
 
         <div class="container">
 
@@ -497,23 +595,27 @@
                     to explore.
                 </h2>
 
-                <div>
+                <div class="copy-column">
+
                     <p>
                         Difurrent is an independent technology company
                         building and exploring software, infrastructure,
                         artificial intelligence, and systems engineering.
                     </p>
+
                     <p>
                         We operate with a bias toward understanding:
                         reading the kernel interfaces, measuring what
                         actually happens, and designing systems that
                         remain understandable under load.
                     </p>
+
                     <p>
                         The company exists to build things worth
-                        understanding—and to share what we learn along
-                        the way.
+                        understanding, and to share what we learn
+                        along the way.
                     </p>
+
                 </div>
 
             </div>
@@ -522,35 +624,54 @@
 
     </section>
 
+
+    <!-- WRITING -->
     <section class="writing section">
-    <div class="container">
-        <div class="section-label">
-            <span>07</span>
-            <span>Writing</span>
+
+        <div class="container">
+
+            <div class="section-label">
+                <span>07</span>
+                <span>Writing</span>
+            </div>
+
+            <div class="writing-header">
+
+                <h2>
+                    Notes from the current.
+                </h2>
+
+                <a
+                    href="/articles/"
+                    class="text-button"
+                >
+                    All writing
+                    <span aria-hidden="true">↗</span>
+                </a>
+
+            </div>
+
+            <div
+                class="article-grid"
+                data-notion-articles
+                data-featured="true"
+                data-limit="3"
+            >
+                <p class="empty-state">
+                    Loading articles...
+                </p>
+            </div>
+
         </div>
 
-        <div class="writing-header">
-            <h2>Notes from the current.</h2>
-            <a href="/articles/" class="text-button">
-                All writing
-                <span>↗</span>
-            </a>
-        </div>
+    </section>
 
-        <div
-            class="article-grid"
-            data-notion-articles
-            data-featured="true"
-            data-limit="3"
-        >
-            <p class="empty-state">
-                Loading articles...
-            </p>
-        </div>
-    </div>
-</section>
 
-    <section id="contact" class="contact section">
+    <!-- CONTACT -->
+    <section
+        id="contact"
+        class="contact section"
+    >
 
         <div class="container">
 
@@ -561,13 +682,16 @@
 
             <div class="contact-content">
 
-                <h2>Follow the current.</h2>
+                <h2>
+                    Follow the current.
+                </h2>
 
                 <p class="contact-lead">
                     Updates, notes, and conversation live on X and LinkedIn.
                 </p>
 
                 <div class="contact-links">
+
                     <a
                         class="contact-link"
                         href="https://x.com/difurrent"
@@ -575,8 +699,9 @@
                         rel="noopener noreferrer"
                     >
                         @difurrent on X
-                        <span>↗</span>
+                        <span aria-hidden="true">↗</span>
                     </a>
+
                     <a
                         class="contact-link"
                         href="https://www.linkedin.com/company/difurrent/"
@@ -584,8 +709,9 @@
                         rel="noopener noreferrer"
                     >
                         LinkedIn
-                        <span>↗</span>
+                        <span aria-hidden="true">↗</span>
                     </a>
+
                 </div>
 
             </div>
@@ -596,20 +722,26 @@
 
 </main>
 
+
+<!-- FOOTER -->
 <footer class="site-footer">
 
     <div class="container footer-inner">
 
-        <div>
+        <div class="footer-brand">
             <strong>DIFURRENT</strong>
             <span>A different current.</span>
         </div>
 
-        <div class="footer-links">
+        <nav
+            class="footer-links"
+            aria-label="Footer navigation"
+        >
             <a href="/#work">Work</a>
             <a href="/articles/">Writing</a>
             <a href="/#about">About</a>
             <a href="/#contact">Contact</a>
+
             <a
                 href="https://www.linkedin.com/company/difurrent/"
                 target="_blank"
@@ -617,6 +749,7 @@
             >
                 LinkedIn
             </a>
+
             <a
                 href="https://x.com/difurrent"
                 target="_blank"
@@ -624,31 +757,39 @@
             >
                 X
             </a>
-        </div>
+        </nav>
 
-        <span>© 2026 Difurrent</span>
+        <span>
+            © 2026 Difurrent
+        </span>
 
     </div>
 
 </footer>
 
+
+<!-- COOKIE CONSENT -->
 <div
     class="consent-banner"
     data-consent-banner
     hidden
 >
     <div class="consent-inner">
+
         <div>
             <p class="consent-label">
                 Cookies & preferences
             </p>
+
             <p>
                 Difurrent uses necessary browser storage to remember
                 your choices. Optional preferences can remember things
                 such as your theme.
             </p>
         </div>
+
         <div class="consent-actions">
+
             <button
                 type="button"
                 class="button button-secondary"
@@ -656,6 +797,7 @@
             >
                 Necessary only
             </button>
+
             <button
                 type="button"
                 class="button button-secondary"
@@ -663,6 +805,7 @@
             >
                 Manage
             </button>
+
             <button
                 type="button"
                 class="button button-primary"
@@ -670,10 +813,14 @@
             >
                 Accept all
             </button>
+
         </div>
+
     </div>
 </div>
 
+
+<!-- COOKIE SETTINGS -->
 <div
     class="consent-modal"
     data-consent-modal
@@ -687,75 +834,95 @@
         aria-modal="true"
         aria-labelledby="consent-title"
     >
+
         <div class="consent-dialog-header">
+
             <div>
                 <span class="eyebrow">
                     Privacy
                 </span>
+
                 <h2 id="consent-title">
                     Cookies & preferences
                 </h2>
             </div>
+
             <button
                 type="button"
                 class="dialog-close"
                 data-consent-close
-                aria-label="Close"
+                aria-label="Close preferences"
             >
                 ×
             </button>
+
         </div>
 
         <div class="consent-options">
+
             <div class="consent-option">
+
                 <div>
                     <strong>Necessary</strong>
+
                     <p>
                         Required for basic website operation and
                         remembering consent.
                     </p>
                 </div>
+
                 <span class="consent-required">
                     Always on
                 </span>
+
             </div>
 
             <div class="consent-option">
+
                 <div>
                     <strong>Preferences</strong>
+
                     <p>
                         Allows Difurrent to remember interface
                         preferences such as your selected theme.
                     </p>
                 </div>
+
                 <label class="switch">
                     <input
                         type="checkbox"
                         data-consent-preferences
                     >
-                    <span></span>
+                    <span aria-hidden="true"></span>
                 </label>
+
             </div>
 
             <div class="consent-option">
+
                 <div>
                     <strong>Analytics</strong>
+
                     <p>
                         Optional measurement tools. Difurrent currently
                         does not load third-party analytics.
                     </p>
                 </div>
+
                 <label class="switch">
                     <input
                         type="checkbox"
                         data-consent-analytics
                     >
-                    <span></span>
+                    <span aria-hidden="true"></span>
                 </label>
+
             </div>
+
         </div>
 
         <div class="consent-dialog-actions">
+
             <button
                 type="button"
                 class="button button-secondary"
@@ -763,6 +930,7 @@
             >
                 Cancel
             </button>
+
             <button
                 type="button"
                 class="button button-primary"
@@ -770,11 +938,16 @@
             >
                 Save preferences
             </button>
+
         </div>
+
     </section>
 </div>
 
+
+<!-- PROJECT DIALOG -->
 <dialog class="project-dialog">
+
     <button
         class="dialog-close"
         type="button"
@@ -784,42 +957,53 @@
     </button>
 
     <div class="dialog-content">
+
         <span class="eyebrow">
             Systems / Linux
         </span>
+
         <h2>
             ProcWatch
         </h2>
+
         <p class="dialog-lead">
             A self-contained Linux process monitoring tool that
             reconstructs process information directly from the
-            kernel’s /proc filesystem.
+            kernel's /proc filesystem.
         </p>
+
         <div class="dialog-body">
+
             <p>
                 ProcWatch explores what actually happens underneath
                 familiar process monitoring tools.
             </p>
+
             <p>
                 Instead of invoking ps, top, or another external
-                process utility, the program reads Linux’s /proc
+                process utility, the program reads Linux's /proc
                 interface directly.
             </p>
+
             <p>
                 The project covers process enumeration, metadata,
                 CPU utilisation, memory usage, filtering, sorting,
                 process hierarchy, file descriptors, and memory
                 mappings.
             </p>
+
         </div>
+
         <div class="tag-list">
             <span>C</span>
             <span>Linux</span>
             <span>/proc</span>
             <span>Systems engineering</span>
         </div>
+
     </div>
+
 </dialog>
-<script src="/notion-articles.js" defer></script>
+
 </body>
 </html>

@@ -1,16 +1,77 @@
 "use strict";
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-        setupMobileNavigation();
-        setupTheme();
-        setupConsent();
-        setupProjectDialog();
-        setupArticleToc();
-        setupReveal();
+document.addEventListener("DOMContentLoaded", () => {
+    setupMobileNavigation();
+    setupTheme();
+    setupConsent();
+    setupProjectDialog();
+    setupArticleToc();
+    setupReveal();
+});
+
+/*
+|--------------------------------------------------------------------------
+| Shared helpers
+|--------------------------------------------------------------------------
+*/
+
+function getSystemTheme() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+}
+
+function getConsent() {
+    try {
+        const stored = localStorage.getItem("difurrent-consent");
+
+        return stored ? JSON.parse(stored) : null;
+    } catch {
+        return null;
     }
-);
+}
+
+function hasPreferenceConsent() {
+    return getConsent()?.preferences === true;
+}
+
+function getThemeMode() {
+    try {
+        const mode = localStorage.getItem("difurrent-theme-mode");
+
+        return ["system", "light", "dark"].includes(mode)
+            ? mode
+            : "system";
+    } catch {
+        return "system";
+    }
+}
+
+function setStoredThemeMode(mode) {
+    if (!hasPreferenceConsent()) {
+        return;
+    }
+
+    try {
+        if (mode === "system") {
+            localStorage.removeItem("difurrent-theme-mode");
+            localStorage.removeItem("difurrent-theme");
+            return;
+        }
+
+        localStorage.setItem(
+            "difurrent-theme-mode",
+            mode
+        );
+
+        localStorage.setItem(
+            "difurrent-theme",
+            mode
+        );
+    } catch {
+        // Browser storage may be unavailable.
+    }
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -19,22 +80,14 @@ document.addEventListener(
 */
 
 function setupMobileNavigation() {
-    const toggle =
-        document.querySelector(
-            ".menu-toggle"
-        );
-
-    const mobileNav =
-        document.querySelector(
-            ".mobile-nav"
-        );
+    const toggle = document.querySelector(".menu-toggle");
+    const mobileNav = document.querySelector(".mobile-nav");
 
     if (!toggle || !mobileNav) {
         return;
     }
 
-    const links =
-        mobileNav.querySelectorAll("a");
+    const links = mobileNav.querySelectorAll("a");
 
     function setMenu(open) {
         toggle.setAttribute(
@@ -65,37 +118,30 @@ function setupMobileNavigation() {
         );
     }
 
-    toggle.addEventListener(
-        "click",
-        () => {
-            const open =
-                toggle.getAttribute(
-                    "aria-expanded"
-                ) === "true";
+    toggle.addEventListener("click", () => {
+        const open =
+            toggle.getAttribute("aria-expanded") === "true";
 
-            setMenu(!open);
-        }
-    );
+        setMenu(!open);
+    });
 
-    links.forEach(
-        link => {
-            link.addEventListener(
-                "click",
-                () => setMenu(false)
-            );
-        }
-    );
+    links.forEach(link => {
+        link.addEventListener("click", () => {
+            setMenu(false);
+        });
+    });
 
-    document.addEventListener(
-        "keydown",
-        event => {
-            if (
-                event.key === "Escape"
-            ) {
-                setMenu(false);
-            }
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            setMenu(false);
         }
-    );
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) {
+            setMenu(false);
+        }
+    });
 }
 
 /*
@@ -104,259 +150,155 @@ function setupMobileNavigation() {
 |--------------------------------------------------------------------------
 */
 
-function getSystemTheme() {
-    return window.matchMedia(
-        "(prefers-color-scheme: dark)"
-    ).matches
-        ? "dark"
-        : "light";
-}
-
-function getStoredTheme() {
-    try {
-        const consent =
-            JSON.parse(
-                localStorage.getItem(
-                    "difurrent-consent"
-                ) || "null"
-            );
-
-        if (
-            consent?.preferences !== true
-        ) {
-            return null;
-        }
-
-        const theme =
-            localStorage.getItem(
-                "difurrent-theme"
-            );
-
-        if (
-            theme === "light" ||
-            theme === "dark"
-        ) {
-            return theme;
-        }
-
-        return null;
-
-    } catch {
-        return null;
+function getActiveTheme(mode) {
+    if (mode === "dark") {
+        return "dark";
     }
-}
 
-function getThemeMode() {
-    try {
-        return (
-            localStorage.getItem(
-                "difurrent-theme-mode"
-            ) || "system"
-        );
-    } catch {
-        return "system";
+    if (mode === "light") {
+        return "light";
     }
+
+    return getSystemTheme();
 }
 
 function applyThemeMode(mode) {
-    const theme =
-        mode === "dark"
-            ? "dark"
-            : mode === "light"
-                ? "light"
-                : getSystemTheme();
+    const theme = getActiveTheme(mode);
 
-    document.documentElement.dataset.theme =
-        theme;
+    document.documentElement.dataset.theme = theme;
 
     updateThemeLabel(mode);
+    updateThemeChoices(mode);
 }
 
 function updateThemeLabel(mode) {
-    const labels =
-        document.querySelectorAll(
-            ".theme-button-label"
-        );
-
-    labels.forEach(
-        label => {
-            label.textContent =
-                mode.charAt(0).toUpperCase() +
-                mode.slice(1);
-        }
+    const label = document.querySelector(
+        ".theme-button-label"
     );
+
+    if (!label) {
+        return;
+    }
+
+    label.textContent =
+        mode.charAt(0).toUpperCase() +
+        mode.slice(1);
+}
+
+function updateThemeChoices(mode) {
+    const choices = document.querySelectorAll(
+        "[data-theme-choice]"
+    );
+
+    choices.forEach(choice => {
+        const selected =
+            choice.dataset.themeChoice === mode;
+
+        choice.setAttribute(
+            "aria-checked",
+            String(selected)
+        );
+    });
 }
 
 function setupTheme() {
-    const button =
-        document.querySelector(
-            ".theme-button"
-        );
+    const button = document.querySelector(
+        ".theme-button"
+    );
 
-    const menu =
-        document.querySelector(
-            ".theme-menu"
-        );
+    const menu = document.querySelector(
+        ".theme-menu"
+    );
 
     if (!button || !menu) {
         return;
     }
 
-    let currentMode =
-        getThemeMode();
+    let currentMode = getThemeMode();
 
-    applyThemeMode(
-        currentMode
-    );
+    applyThemeMode(currentMode);
 
-    button.addEventListener(
-        "click",
-        event => {
-            event.stopPropagation();
+    function closeMenu() {
+        menu.setAttribute("hidden", "");
 
-            const hidden =
-                menu.hasAttribute("hidden");
-
-            if (hidden) {
-                menu.removeAttribute(
-                    "hidden"
-                );
-            } else {
-                menu.setAttribute(
-                    "hidden",
-                    ""
-                );
-            }
-
-            button.setAttribute(
-                "aria-expanded",
-                String(hidden)
-            );
-        }
-    );
-
-    const choices =
-        menu.querySelectorAll(
-            "[data-theme-choice]"
+        button.setAttribute(
+            "aria-expanded",
+            "false"
         );
+    }
 
-    choices.forEach(
-        choice => {
+    function openMenu() {
+        menu.removeAttribute("hidden");
 
-            choice.addEventListener(
-                "click",
-                () => {
+        button.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+    }
 
-                    const mode =
-                        choice.dataset
-                            .themeChoice;
+    button.addEventListener("click", event => {
+        event.stopPropagation();
 
-                    currentMode =
-                        mode;
+        const isOpen =
+            !menu.hasAttribute("hidden");
 
-                    applyThemeMode(
-                        mode
-                    );
-
-                    if (
-                        hasPreferenceConsent()
-                    ) {
-                        try {
-                            localStorage.setItem(
-                                "difurrent-theme-mode",
-                                mode
-                            );
-
-                            if (
-                                mode === "light" ||
-                                mode === "dark"
-                            ) {
-                                localStorage.setItem(
-                                    "difurrent-theme",
-                                    mode
-                                );
-                            } else {
-                                localStorage.removeItem(
-                                    "difurrent-theme"
-                                );
-                            }
-                        } catch {
-                            // Persistence unavailable.
-                        }
-                    }
-
-                    menu.setAttribute(
-                        "hidden",
-                        ""
-                    );
-
-                    button.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-                }
-            );
+        if (isOpen) {
+            closeMenu();
+        } else {
+            openMenu();
         }
+    });
+
+    const choices = menu.querySelectorAll(
+        "[data-theme-choice]"
     );
 
-    document.addEventListener(
-        "click",
-        event => {
+    choices.forEach(choice => {
+        choice.addEventListener("click", () => {
+            const mode =
+                choice.dataset.themeChoice;
+
             if (
-                !menu.contains(
-                    event.target
-                ) &&
-                !button.contains(
-                    event.target
+                !["system", "light", "dark"].includes(
+                    mode
                 )
             ) {
-                menu.setAttribute(
-                    "hidden",
-                    ""
-                );
-
-                button.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
+                return;
             }
+
+            currentMode = mode;
+
+            applyThemeMode(currentMode);
+            setStoredThemeMode(currentMode);
+
+            closeMenu();
+        });
+    });
+
+    document.addEventListener("click", event => {
+        if (
+            !menu.contains(event.target) &&
+            !button.contains(event.target)
+        ) {
+            closeMenu();
         }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closeMenu();
+        }
+    });
+
+    const media = window.matchMedia(
+        "(prefers-color-scheme: dark)"
     );
 
-    const media =
-        window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        );
-
-    media.addEventListener(
-        "change",
-        () => {
-            if (
-                getThemeMode() ===
-                "system"
-            ) {
-                applyThemeMode(
-                    "system"
-                );
-            }
+    media.addEventListener("change", () => {
+        if (getThemeMode() === "system") {
+            applyThemeMode("system");
         }
-    );
-}
-
-function hasPreferenceConsent() {
-    try {
-        const consent =
-            JSON.parse(
-                localStorage.getItem(
-                    "difurrent-consent"
-                ) || "null"
-            );
-
-        return consent?.preferences === true;
-
-    } catch {
-        return false;
-    }
+    });
 }
 
 /*
@@ -365,33 +307,16 @@ function hasPreferenceConsent() {
 |--------------------------------------------------------------------------
 */
 
-function getConsent() {
-    try {
-        const stored =
-            localStorage.getItem(
-                "difurrent-consent"
-            );
-
-        return stored
-            ? JSON.parse(stored)
-            : null;
-
-    } catch {
-        return null;
-    }
-}
-
 function saveConsent({
     preferences = false,
     analytics = false
-}) {
+} = {}) {
     const consent = {
         version: 1,
         necessary: true,
-        preferences,
-        analytics,
-        timestamp:
-            new Date().toISOString()
+        preferences: Boolean(preferences),
+        analytics: Boolean(analytics),
+        timestamp: new Date().toISOString()
     };
 
     try {
@@ -412,7 +337,9 @@ function saveConsent({
             localStorage.removeItem(
                 "difurrent-theme-mode"
             );
-        } catch {}
+        } catch {
+            // Browser storage may be unavailable.
+        }
     }
 
     if (analytics) {
@@ -422,95 +349,76 @@ function saveConsent({
 
 function loadAnalytics() {
     /*
-     * Intentionally empty.
+     * Reserved for a future analytics provider.
      *
-     * When Difurrent actually adds an analytics
-     * provider, initialize it here.
-     *
-     * Never load analytics before checking:
-     *
-     * consent.analytics === true
+     * Analytics must only be initialized from this function
+     * after explicit analytics consent has been granted.
      */
 }
 
 function setupConsent() {
-    const banner =
-        document.querySelector(
-            "[data-consent-banner]"
-        );
+    const banner = document.querySelector(
+        "[data-consent-banner]"
+    );
 
-    const modal =
-        document.querySelector(
-            "[data-consent-modal]"
-        );
+    const modal = document.querySelector(
+        "[data-consent-modal]"
+    );
 
     if (!banner || !modal) {
         return;
     }
 
-    const necessaryButton =
-        document.querySelector(
-            "[data-consent-necessary]"
-        );
+    const necessaryButton = document.querySelector(
+        "[data-consent-necessary]"
+    );
 
-    const acceptAll =
-        document.querySelector(
-            "[data-consent-all]"
-        );
+    const acceptAll = document.querySelector(
+        "[data-consent-all]"
+    );
 
-    const manage =
-        document.querySelector(
-            "[data-consent-manage]"
-        );
+    const manage = document.querySelector(
+        "[data-consent-manage]"
+    );
 
-    const save =
-        document.querySelector(
-            "[data-consent-save]"
-        );
+    const save = document.querySelector(
+        "[data-consent-save]"
+    );
 
-    const closeButtons =
-        document.querySelectorAll(
-            "[data-consent-close]"
-        );
+    const closeButtons = document.querySelectorAll(
+        "[data-consent-close]"
+    );
 
-    const preferences =
-        document.querySelector(
-            "[data-consent-preferences]"
-        );
+    const preferences = document.querySelector(
+        "[data-consent-preferences]"
+    );
 
-    const analytics =
-        document.querySelector(
-            "[data-consent-analytics]"
-        );
+    const analytics = document.querySelector(
+        "[data-consent-analytics]"
+    );
 
-    const existing =
-        getConsent();
+    const existing = getConsent();
 
     if (!existing) {
-        banner.removeAttribute(
-            "hidden"
-        );
-    } else if (
-        existing.analytics
-    ) {
+        banner.removeAttribute("hidden");
+    } else if (existing.analytics === true) {
         loadAnalytics();
     }
 
     function openModal() {
-        const current =
-            getConsent();
+        const current = getConsent();
 
-        if (current) {
+        if (preferences) {
             preferences.checked =
-                current.preferences === true;
-
-            analytics.checked =
-                current.analytics === true;
+                current?.preferences === true;
         }
 
-        modal.removeAttribute(
-            "hidden"
-        );
+        if (analytics) {
+            analytics.checked =
+                current?.analytics === true;
+        }
+
+        modal.removeAttribute("hidden");
 
         document.body.classList.add(
             "modal-open"
@@ -570,9 +478,10 @@ function setupConsent() {
         () => {
             saveConsent({
                 preferences:
-                    preferences.checked,
+                    preferences?.checked === true,
+
                 analytics:
-                    analytics.checked
+                    analytics?.checked === true
             });
 
             banner.setAttribute(
@@ -584,19 +493,15 @@ function setupConsent() {
         }
     );
 
-    closeButtons.forEach(
-        button => {
-            button.addEventListener(
-                "click",
-                closeModal
-            );
-        }
-    );
+    closeButtons.forEach(button => {
+        button.addEventListener(
+            "click",
+            closeModal
+        );
+    });
 
     modal
-        .querySelector(
-            ".consent-modal-backdrop"
-        )
+        .querySelector(".consent-modal-backdrop")
         ?.addEventListener(
             "click",
             closeModal
@@ -622,15 +527,13 @@ function setupConsent() {
 */
 
 function setupProjectDialog() {
-    const dialog =
-        document.querySelector(
-            ".project-dialog"
-        );
+    const dialog = document.querySelector(
+        ".project-dialog"
+    );
 
-    const trigger =
-        document.querySelector(
-            ".project-dialog-trigger"
-        );
+    const trigger = document.querySelector(
+        ".project-dialog-trigger"
+    );
 
     if (!dialog || !trigger) {
         return;
@@ -644,20 +547,20 @@ function setupProjectDialog() {
     trigger.addEventListener(
         "click",
         () => {
-            dialog.showModal();
+            if (!dialog.open) {
+                dialog.showModal();
+            }
         }
     );
 
-    closeButtons.forEach(
-        button => {
-            button.addEventListener(
-                "click",
-                () => {
-                    dialog.close();
-                }
-            );
-        }
-    );
+    closeButtons.forEach(button => {
+        button.addEventListener(
+            "click",
+            () => {
+                dialog.close();
+            }
+        );
+    });
 
     dialog.addEventListener(
         "click",
@@ -665,17 +568,13 @@ function setupProjectDialog() {
             const rect =
                 dialog.getBoundingClientRect();
 
-            const outside =
-                event.clientX <
-                    rect.left ||
-                event.clientX >
-                    rect.right ||
-                event.clientY <
-                    rect.top ||
-                event.clientY >
-                    rect.bottom;
+            const clickedOutside =
+                event.clientX < rect.left ||
+                event.clientX > rect.right ||
+                event.clientY < rect.top ||
+                event.clientY > rect.bottom;
 
-            if (outside) {
+            if (clickedOutside) {
                 dialog.close();
             }
         }
@@ -689,80 +588,78 @@ function setupProjectDialog() {
 */
 
 function setupArticleToc() {
-    const content =
-        document.querySelector(
-            ".article-content"
-        );
+    const content = document.querySelector(
+        ".article-content"
+    );
 
-    const toc =
-        document.querySelector(
-            "[data-toc-list]"
-        );
+    const toc = document.querySelector(
+        "[data-toc-list]"
+    );
+
+    const aside = document.querySelector(
+        ".article-toc"
+    );
 
     if (!content || !toc) {
         return;
     }
 
-    const headings =
-        content.querySelectorAll(
-            "h2, h3"
-        );
+    const headings = content.querySelectorAll(
+        "h2, h3"
+    );
 
     if (!headings.length) {
-        const aside =
-            document.querySelector(
-                ".article-toc"
-            );
-
         aside?.remove();
-
         return;
     }
 
-    headings.forEach(
-        (heading, index) => {
+    const usedIds = new Set();
 
-            if (!heading.id) {
-                heading.id =
-                    createHeadingId(
-                        heading.textContent,
-                        index
-                    );
-            }
+    headings.forEach((heading, index) => {
+        const id = getUniqueHeadingId(
+            heading,
+            index,
+            usedIds
+        );
 
-            const link =
-                document.createElement(
-                    "a"
-                );
+        heading.id = id;
+        usedIds.add(id);
 
-            link.href =
-                `#${heading.id}`;
+        const link =
+            document.createElement("a");
 
-            link.textContent =
-                heading.textContent;
+        link.href = `#${id}`;
+        link.textContent =
+            heading.textContent.trim();
 
-            if (
-                heading.tagName ===
-                "H3"
-            ) {
-                link.classList.add(
-                    "toc-subheading"
-                );
-            }
-
-            toc.appendChild(
-                link
+        if (heading.tagName === "H3") {
+            link.classList.add(
+                "toc-subheading"
             );
         }
-    );
+
+        link.addEventListener(
+            "click",
+            () => {
+                history.replaceState(
+                    null,
+                    "",
+                    `#${id}`
+                );
+            }
+        );
+
+        toc.appendChild(link);
+    });
 }
 
-function createHeadingId(
-    text,
-    index
+function getUniqueHeadingId(
+    heading,
+    index,
+    usedIds
 ) {
     const base =
-        text
+        heading.textContent
             .toLowerCase()
             .trim()
             .replace(
@@ -772,17 +669,31 @@ function createHeadingId(
             .replace(
                 /\s+/g,
                 "-"
-            );
+            )
+            .replace(
+                /-+/g,
+                "-"
+            )
+            .replace(
+                /^-|-$/g,
+                ""
+            ) ||
+        `section-${index + 1}`;
 
-    return (
-        base ||
-        `section-${index + 1}`
-    );
+    let id = base;
+    let counter = 2;
+
+    while (usedIds.has(id)) {
+        id = `${base}-${counter}`;
+        counter++;
+    }
+
+    return id;
 }
 
 /*
 |--------------------------------------------------------------------------
-| Reveal
+| Reveal animations
 |--------------------------------------------------------------------------
 */
 
@@ -792,46 +703,48 @@ function setupReveal() {
             ".section, .article-card, .area"
         );
 
-    if (
-        !elements.length ||
-        !("IntersectionObserver" in window)
-    ) {
+    if (!elements.length) {
+        return;
+    }
+
+    /*
+     * If IntersectionObserver is unavailable,
+     * content should remain visible.
+     */
+    if (!("IntersectionObserver" in window)) {
+        elements.forEach(element => {
+            element.classList.add(
+                "is-visible"
+            );
+        });
+
         return;
     }
 
     const observer =
         new IntersectionObserver(
             entries => {
-
-                entries.forEach(
-                    entry => {
-
-                        if (
-                            entry.isIntersecting
-                        ) {
-                            entry.target.classList.add(
-                                "is-visible"
-                            );
-
-                            observer.unobserve(
-                                entry.target
-                            );
-                        }
-
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
                     }
-                );
 
+                    entry.target.classList.add(
+                        "is-visible"
+                    );
+
+                    observer.unobserve(
+                        entry.target
+                    );
+                });
             },
             {
-                threshold: 0.08
+                threshold: 0.08,
+                rootMargin: "0px 0px -40px 0px"
             }
         );
 
-    elements.forEach(
-        element => {
-            observer.observe(
-                element
-            );
-        }
-    );
+    elements.forEach(element => {
+        observer.observe(element);
+    });
 }

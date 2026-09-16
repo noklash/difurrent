@@ -1,4 +1,6 @@
-(function () {
+"use strict";
+
+(() => {
     const container = document.querySelector("[data-notion-articles]");
     if (!container) return;
 
@@ -17,117 +19,210 @@
 
     function formatDate(value) {
         if (!value) return "";
-        try {
-            return new Intl.DateTimeFormat("en", {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }).format(new Date(value));
-        } catch {
-            return value;
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "";
         }
+
+        return new Intl.DateTimeFormat("en", {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }).format(date);
     }
 
-    fetch("/api/articles")
+    function createArticleCard(article, index) {
+        const href =
+            `/articles/live.html?slug=${encodeURIComponent(article.slug)}`;
+
+        const title = escapeHtml(article.title || "Untitled article");
+        const category = escapeHtml(article.category || "Technology");
+        const excerpt = escapeHtml(article.excerpt || "");
+        const date = formatDate(article.publishDate);
+        const readingTime = article.readingTime
+            ? `${escapeHtml(article.readingTime)} min read`
+            : "Article";
+
+        const isFeatured = index === 0;
+
+        return `
+            <article class="article-card${isFeatured ? " article-card-featured" : ""}">
+                <a
+                    class="article-card-media"
+                    href="${href}"
+                    aria-label="Read ${title}"
+                >
+                    ${
+                        article.cover
+                            ? `
+                                <img
+                                    src="${escapeHtml(article.cover)}"
+                                    alt="${escapeHtml(
+                                        article.coverAlt || article.title || ""
+                                    )}"
+                                    loading="${isFeatured ? "eager" : "lazy"}"
+                                    decoding="async"
+                                >
+                            `
+                            : `
+                                <span class="article-card-placeholder">
+                                    <span>DIFURRENT</span>
+                                    <span>FIELD NOTE / ${String(index + 1).padStart(2, "0")}</span>
+                                </span>
+                            `
+                    }
+
+                    <span class="article-card-index">
+                        ${String(index + 1).padStart(2, "0")}
+                    </span>
+                </a>
+
+                <div class="article-card-body">
+                    <div class="article-card-meta">
+                        <span>${category}</span>
+
+                        ${
+                            date
+                                ? `
+                                    <span class="article-card-separator">
+                                        /
+                                    </span>
+
+                                    <time datetime="${escapeHtml(
+                                        article.publishDate
+                                    )}">
+                                        ${escapeHtml(date)}
+                                    </time>
+                                `
+                                : ""
+                        }
+
+                        <span class="article-card-separator">
+                            /
+                        </span>
+
+                        <span>${readingTime}</span>
+                    </div>
+
+                    <h3 class="article-card-title">
+                        <a href="${href}">
+                            ${title}
+                        </a>
+                    </h3>
+
+                    ${
+                        excerpt
+                            ? `
+                                <p class="article-card-excerpt">
+                                    ${excerpt}
+                                </p>
+                            `
+                            : ""
+                    }
+
+                    <a
+                        class="article-card-link"
+                        href="${href}"
+                        aria-label="Read ${title}"
+                    >
+                        <span>Read article</span>
+                        <span class="article-card-arrow" aria-hidden="true">
+                            ↗
+                        </span>
+                    </a>
+                </div>
+            </article>
+        `;
+    }
+
+    function renderArticles(articles) {
+        container.innerHTML = `
+            <div class="articles-grid">
+                ${articles.map(createArticleCard).join("")}
+            </div>
+        `;
+    }
+
+    function renderEmpty() {
+        container.innerHTML = `
+            <div class="articles-empty">
+                <span class="articles-empty-index">00</span>
+
+                <div>
+                    <p class="articles-empty-label">
+                        WRITING / DATABASE
+                    </p>
+
+                    <p class="articles-empty-text">
+                        No articles published yet. Technical notes,
+                        experiments and field reports will appear here.
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderError() {
+        container.innerHTML = `
+            <div class="articles-empty articles-error">
+                <span class="articles-empty-index">!</span>
+
+                <div>
+                    <p class="articles-empty-label">
+                        WRITING / UNAVAILABLE
+                    </p>
+
+                    <p class="articles-empty-text">
+                        The article index could not be loaded.
+                        Please try again later.
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+
+    fetch("/api/articles", {
+        headers: {
+            Accept: "application/json"
+        }
+    })
         .then((response) => {
             if (!response.ok) {
-                throw new Error(`Article request failed: ${response.status}`);
+                throw new Error(
+                    `Article request failed: ${response.status}`
+                );
             }
+
             return response.json();
         })
         .then((data) => {
-            let articles = data.articles || [];
-
-            if (featuredOnly) {
-                articles = articles.filter((article) => article.featured);
+            if (!data || typeof data !== "object") {
+                throw new Error("Invalid article response.");
             }
 
-            articles = articles.slice(0, limit);
+            let articles = Array.isArray(data.articles)
+                ? data.articles
+                : [];
+
+            if (featuredOnly) {
+                articles = articles.filter(
+                    (article) => article.featured === true
+                );
+            }
+
+            articles = articles.slice(0, Math.max(0, limit));
 
             if (!articles.length) {
-                container.innerHTML = `
-                    <p class="empty-state">
-                        No articles published yet. Technical notes and
-                        field reports will appear here.
-                    </p>
-                `;
+                renderEmpty();
                 return;
             }
 
-            container.innerHTML = articles.map((article) => {
-                const href = `/articles/live.html?slug=${encodeURIComponent(article.slug)}`;
-                const date = formatDate(article.publishDate);
-
-                return `
-                    <article class="article-card reveal is-visible">
-                        ${
-                            article.cover
-                                ? `
-                                    <a href="${href}" class="article-card-image">
-                                        <img
-                                            src="${escapeHtml(article.cover)}"
-                                            alt="${escapeHtml(article.coverAlt || article.title)}"
-                                            loading="lazy"
-                                        >
-                                    </a>
-                                `
-                                : `
-                                    <a href="${href}" class="article-card-image article-card-image-empty">
-                                        <span>DIFURRENT</span>
-                                    </a>
-                                `
-                        }
-
-                        <div class="article-card-content">
-                            <div class="article-card-meta">
-                                <span>${escapeHtml(article.category || "Technology")}</span>
-                                ${
-                                    date
-                                        ? `
-                                            <span>·</span>
-                                            <time datetime="${escapeHtml(article.publishDate)}">
-                                                ${escapeHtml(date)}
-                                            </time>
-                                        `
-                                        : ""
-                                }
-                            </div>
-
-                            <h3>
-                                <a href="${href}">
-                                    ${escapeHtml(article.title)}
-                                </a>
-                            </h3>
-
-                            ${
-                                article.excerpt
-                                    ? `<p>${escapeHtml(article.excerpt)}</p>`
-                                    : ""
-                            }
-
-                            <div class="article-card-footer">
-                                <span>
-                                    ${
-                                        article.readingTime
-                                            ? `${escapeHtml(article.readingTime)} min read`
-                                            : "Article"
-                                    }
-                                </span>
-                                <a class="text-button" href="${href}">
-                                    Read
-                                    <span>↗</span>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            }).join("");
+            renderArticles(articles);
         })
         .catch((error) => {
-            container.innerHTML = `
-                <p class="empty-state">
-                    Could not load articles: ${escapeHtml(error.message)}
-                </p>
-            `;
+            console.error("[Difurrent] Article index error:", error);
+            renderError();
         });
 })();

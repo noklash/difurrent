@@ -3,8 +3,6 @@
 <head>
 
     <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.ico">
-    <link rel="icon" type="image/png" href="/assets/favicon/favicon.svg">
 
     <meta
         name="viewport"
@@ -18,14 +16,77 @@
         content="{{DESCRIPTION}}"
     >
 
-    <meta name="theme-color" content="#f4f4f1">
+    <meta
+        name="author"
+        content="Difurrent"
+    >
 
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <meta
+        name="referrer"
+        content="strict-origin-when-cross-origin"
+    >
+
+    <meta
+        name="color-scheme"
+        content="dark light"
+    >
+
+    <!-- Favicons -->
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="/assets/favicon/favicon.svg"
+    >
+
+    <link
+        rel="icon"
+        href="/assets/favicon/favicon.ico"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/assets/favicon/apple-touch-icon.png"
+    >
+
+    <!-- Canonical -->
     <link
         rel="canonical"
         href="{{CANONICAL_URL}}"
     >
 
-    <meta property="og:type" content="article">
+    <!-- Theme color -->
+    <meta
+        name="theme-color"
+        content="#0A0A0A"
+        media="(prefers-color-scheme: dark)"
+    >
+
+    <meta
+        name="theme-color"
+        content="#FFFFFF"
+        media="(prefers-color-scheme: light)"
+    >
+
+    <!-- Open Graph -->
+    <meta
+        property="og:type"
+        content="article"
+    >
+
+    <meta
+        property="og:site_name"
+        content="Difurrent"
+    >
+
+    <meta
+        property="og:locale"
+        content="en_US"
+    >
 
     <meta
         property="og:title"
@@ -44,7 +105,16 @@
 
     {{OG_IMAGE}}
 
-    <meta name="twitter:card" content="summary_large_image">
+    <!-- X / Twitter -->
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    >
+
+    <meta
+        name="twitter:site"
+        content="@difurrent"
+    >
 
     <meta
         name="twitter:title"
@@ -58,6 +128,34 @@
 
     {{TWITTER_IMAGE}}
 
+    <!-- Article structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": {{TITLE_JSON}},
+        "description": {{DESCRIPTION_JSON}},
+        "url": {{CANONICAL_URL_JSON}},
+        "datePublished": {{DATE_JSON}},
+        "dateModified": {{DATE_JSON}},
+        "author": {
+            "@type": "Organization",
+            "name": "Difurrent",
+            "url": "https://difurrent.com/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Difurrent",
+            "url": "https://difurrent.com/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": {{CANONICAL_URL_JSON}}
+        }
+    }
+    </script>
+
+    <!-- Theme bootstrap -->
     <script>
         (() => {
             const systemTheme =
@@ -94,37 +192,58 @@
         })();
     </script>
 
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/script.js" defer></script>
+    <link
+        rel="stylesheet"
+        href="/styles.css"
+    >
+
+    <script
+        src="/script.js"
+        defer
+    ></script>
 
 </head>
 
 <body class="article-page">
 
-<a class="skip-link" href="#main">
+<a
+    class="skip-link"
+    href="#main"
+>
     Skip to content
 </a>
 
 <header class="site-header">
+
     <div class="container header-inner">
 
-        <a class="wordmark" href="/">
+        <a
+            class="wordmark"
+            href="/"
+            aria-label="Difurrent home"
+        >
             DIFURRENT
         </a>
 
-        <!-- <img
-            class="wordmark"
-            src="/assets/difurrent_primary_black_transparent.png"
-            alt="DIFURRENT"
-            width="150"
-            height="40"
-        /> -->
+        <nav
+            class="desktop-nav"
+            aria-label="Primary navigation"
+        >
+            <a href="/#work">
+                Work
+            </a>
 
-        <nav class="desktop-nav" aria-label="Primary navigation">
-            <a href="/#work">Work</a>
-            <a href="/#about">About</a>
-            <a href="/articles/">Writing</a>
-            <a href="/#contact">Contact</a>
+            <a href="/#about">
+                About
+            </a>
+
+            <a href="/articles/">
+                Writing
+            </a>
+
+            <a href="/#contact">
+                Contact
+            </a>
         </nav>
 
         <div class="header-actions">
@@ -134,6 +253,7 @@
                 type="button"
                 aria-label="Change theme"
                 aria-expanded="false"
+                aria-haspopup="menu"
             >
                 <span class="theme-button-label">
                     System
@@ -145,6 +265,7 @@
                 href="https://x.com/difurrent"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Difurrent on X"
             >
                 X
             </a>
@@ -164,17 +285,34 @@
 
     </div>
 
-    <div class="theme-menu" hidden>
+    <div
+        class="theme-menu"
+        role="menu"
+        aria-label="Theme selection"
+        hidden
+    >
 
-        <button type="button" data-theme-choice="system">
+        <button
+            type="button"
+            role="menuitemradio"
+            data-theme-choice="system"
+        >
             System
         </button>
 
-        <button type="button" data-theme-choice="light">
+        <button
+            type="button"
+            role="menuitemradio"
+            data-theme-choice="light"
+        >
             Light
         </button>
 
-        <button type="button" data-theme-choice="dark">
+        <button
+            type="button"
+            role="menuitemradio"
+            data-theme-choice="dark"
+        >
             Dark
         </button>
 
@@ -186,10 +324,21 @@
         aria-label="Mobile navigation"
         aria-hidden="true"
     >
-        <a href="/#work">Work</a>
-        <a href="/#about">About</a>
-        <a href="/articles/">Writing</a>
-        <a href="/#contact">Contact</a>
+        <a href="/#work">
+            Work
+        </a>
+
+        <a href="/#about">
+            About
+        </a>
+
+        <a href="/articles/">
+            Writing
+        </a>
+
+        <a href="/#contact">
+            Contact
+        </a>
     </nav>
 
 </header>
@@ -206,20 +355,30 @@
                     class="article-back"
                     href="/articles/"
                 >
-                    ← All writing
+                    <span aria-hidden="true">←</span>
+                    All writing
                 </a>
 
-                <div class="article-meta">
+                <div
+                    class="article-meta"
+                    aria-label="Article information"
+                >
 
-                    <span>{{CATEGORY}}</span>
+                    <span>
+                        {{CATEGORY}}
+                    </span>
 
-                    <span>·</span>
+                    <span aria-hidden="true">
+                        ·
+                    </span>
 
                     <time datetime="{{DATE}}">
                         {{FORMATTED_DATE}}
                     </time>
 
-                    <span>·</span>
+                    <span aria-hidden="true">
+                        ·
+                    </span>
 
                     <span>
                         {{READING_TIME}}
@@ -245,14 +404,21 @@
 
         <div class="article-layout container">
 
-            <aside class="article-toc" data-article-toc>
+            <aside
+                class="article-toc"
+                data-article-toc
+            >
+
                 <span class="toc-label">
                     On this page
                 </span>
 
-                <nav aria-label="Article contents">
+                <nav
+                    aria-label="Article contents"
+                >
                     <div data-toc-list></div>
                 </nav>
+
             </aside>
 
             <div class="article-content">
@@ -268,18 +434,37 @@
 </main>
 
 <footer class="site-footer">
+
     <div class="container footer-inner">
 
         <div>
-            <strong>DIFURRENT</strong>
-            <span>A different current.</span>
+            <strong>
+                DIFURRENT
+            </strong>
+
+            <span>
+                A different current.
+            </span>
         </div>
 
         <div class="footer-links">
-            <a href="/#work">Work</a>
-            <a href="/articles/">Writing</a>
-            <a href="/#about">About</a>
-            <a href="/#contact">Contact</a>
+
+            <a href="/#work">
+                Work
+            </a>
+
+            <a href="/articles/">
+                Writing
+            </a>
+
+            <a href="/#about">
+                About
+            </a>
+
+            <a href="/#contact">
+                Contact
+            </a>
+
         </div>
 
         <span>
@@ -287,8 +472,10 @@
         </span>
 
     </div>
+
 </footer>
 
+<!-- Consent banner -->
 <div
     class="consent-banner"
     data-consent-banner
@@ -297,6 +484,7 @@
     <div class="consent-inner">
 
         <div>
+
             <p class="consent-label">
                 Cookies & preferences
             </p>
@@ -306,6 +494,7 @@
                 your choices. Optional preferences can remember things
                 such as your theme.
             </p>
+
         </div>
 
         <div class="consent-actions">
@@ -335,14 +524,17 @@
             </button>
 
         </div>
+
     </div>
 </div>
 
+<!-- Consent modal -->
 <div
     class="consent-modal"
     data-consent-modal
     hidden
 >
+
     <div class="consent-modal-backdrop"></div>
 
     <section
@@ -355,6 +547,7 @@
         <div class="consent-dialog-header">
 
             <div>
+
                 <span class="eyebrow">
                     Privacy
                 </span>
@@ -362,13 +555,14 @@
                 <h2 id="consent-title">
                     Cookies & preferences
                 </h2>
+
             </div>
 
             <button
                 type="button"
                 class="dialog-close"
                 data-consent-close
-                aria-label="Close"
+                aria-label="Close preferences"
             >
                 ×
             </button>
@@ -380,12 +574,16 @@
             <div class="consent-option">
 
                 <div>
-                    <strong>Necessary</strong>
+
+                    <strong>
+                        Necessary
+                    </strong>
 
                     <p>
                         Required for basic website operation and
                         remembering consent.
                     </p>
+
                 </div>
 
                 <span class="consent-required">
@@ -397,20 +595,27 @@
             <div class="consent-option">
 
                 <div>
-                    <strong>Preferences</strong>
+
+                    <strong>
+                        Preferences
+                    </strong>
 
                     <p>
                         Allows the site to remember interface
                         preferences such as your selected theme.
                     </p>
+
                 </div>
 
                 <label class="switch">
+
                     <input
                         type="checkbox"
                         data-consent-preferences
                     >
+
                     <span></span>
+
                 </label>
 
             </div>
@@ -418,20 +623,27 @@
             <div class="consent-option">
 
                 <div>
-                    <strong>Analytics</strong>
+
+                    <strong>
+                        Analytics
+                    </strong>
 
                     <p>
                         Optional measurement tools. Difurrent currently
                         does not load third-party analytics.
                     </p>
+
                 </div>
 
                 <label class="switch">
+
                     <input
                         type="checkbox"
                         data-consent-analytics
                     >
+
                     <span></span>
+
                 </label>
 
             </div>
@@ -459,6 +671,7 @@
         </div>
 
     </section>
+
 </div>
 
 </body>
