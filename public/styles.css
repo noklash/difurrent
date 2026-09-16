@@ -109,6 +109,8 @@
 html {
     scroll-behavior: smooth;
     background: var(--bg);
+
+    overflow-x: clip;
 }
 
 body {
@@ -124,6 +126,8 @@ body {
 
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+
+    overflow-x: clip;
 }
 
 body.nav-open {
@@ -135,6 +139,10 @@ svg,
 video {
     display: block;
     max-width: 100%;
+}
+
+img {
+    height: auto;
 }
 
 button,
@@ -205,11 +213,15 @@ a {
         var(--content-width)
     );
 
+    min-width: 0;
+
     margin-inline: auto;
 }
 
 .section {
     position: relative;
+
+    min-width: 0;
 
     padding-block: clamp(5rem, 9vw, 9rem);
 
@@ -237,6 +249,8 @@ a {
 
     width: 22px;
     height: 1px;
+
+    flex-shrink: 0;
 
     background: var(--accent);
 }
@@ -276,12 +290,17 @@ a {
     align-items: center;
     justify-content: space-between;
 
+    width: 100%;
     height: 100%;
+
+    min-width: 0;
 }
 
 .wordmark {
     display: inline-flex;
     align-items: center;
+
+    min-width: 0;
 
     color: var(--text);
 
@@ -297,6 +316,8 @@ a {
 
     width: 6px;
     height: 6px;
+
+    flex-shrink: 0;
 
     margin-right: 0.55rem;
 
@@ -320,6 +341,8 @@ a {
     display: flex;
     align-items: center;
     gap: 1.7rem;
+
+    min-width: 0;
 }
 
 .desktop-nav a,
@@ -373,6 +396,8 @@ a {
     display: flex;
     align-items: center;
     gap: 1rem;
+
+    min-width: 0;
 }
 
 .x-link,
@@ -393,6 +418,8 @@ a {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+
+    flex-shrink: 0;
 
     padding: 0;
 
@@ -420,6 +447,8 @@ a {
     width: 7px;
     height: 7px;
 
+    flex-shrink: 0;
+
     border: 1px solid currentColor;
     border-radius: 50%;
 }
@@ -434,6 +463,7 @@ a {
     z-index: 1100;
 
     width: 150px;
+    max-width: calc(100vw - 2rem);
 
     padding: 0.35rem;
 
@@ -490,6 +520,8 @@ a {
 
     position: relative;
 
+    flex-shrink: 0;
+
     width: 34px;
     height: 34px;
 
@@ -534,14 +566,23 @@ a {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 999;
+    z-index: 1001;
 
     display: flex;
     flex-direction: column;
 
+    width: 100%;
+    max-width: 100vw;
+    min-width: 0;
+
     padding: 1.5rem;
 
     background: var(--bg);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 
     opacity: 0;
     visibility: hidden;
@@ -564,6 +605,9 @@ a {
     align-items: center;
     justify-content: space-between;
 
+    width: 100%;
+    min-width: 0;
+
     padding: 1.1rem 0;
 
     border-bottom: 1px solid var(--line);
@@ -574,10 +618,16 @@ a {
     font-size: 2rem;
     letter-spacing: -0.04em;
     text-decoration: none;
+
+    overflow-wrap: anywhere;
 }
 
 .mobile-nav a::after {
     content: "↗";
+
+    flex-shrink: 0;
+
+    margin-left: 1rem;
 
     color: var(--accent);
 
@@ -669,6 +719,7 @@ a {
     align-items: center;
 
     min-height: calc(100vh - var(--header-height));
+    min-width: 0;
 
     gap: clamp(2rem, 5vw, 6rem);
 }
@@ -699,6 +750,8 @@ a {
 }
 
 .hero-content {
+    min-width: 0;
+
     padding-block: 6rem;
 }
 
@@ -712,6 +765,8 @@ a {
     font-weight: 700;
     line-height: 0.88;
     letter-spacing: -0.065em;
+
+    overflow-wrap: normal;
 }
 
 .hero-description {
@@ -745,6 +800,8 @@ a {
     max-width: 580px;
 
     aspect-ratio: 1;
+
+    min-width: 0;
 
     margin-inline: auto;
 }
@@ -821,6 +878,8 @@ a {
 
     display: flex;
     justify-content: space-between;
+
+    min-width: 0;
 
     color: var(--faint);
 
@@ -1035,6 +1094,7 @@ a {
     justify-content: center;
 
     min-height: 44px;
+    min-width: 0;
 
     padding: 0.75rem 1rem;
 
@@ -1092,6 +1152,7 @@ a {
     gap: 0.5rem;
 
     width: fit-content;
+    min-width: 0;
 
     padding: 0;
 
@@ -1133,6 +1194,8 @@ a {
         minmax(300px, 0.75fr)
         minmax(0, 1.25fr);
 
+    min-width: 0;
+
     gap: clamp(3rem, 9vw, 10rem);
 }
 
@@ -1149,6 +1212,7 @@ a {
 
 .copy-column {
     max-width: 65ch;
+    min-width: 0;
 
     color: var(--muted);
 
@@ -1177,7 +1241,9 @@ a {
 .areas-grid {
     display: grid;
 
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    min-width: 0;
 
     border-top: 1px solid var(--line);
     border-left: 1px solid var(--line);
@@ -1186,6 +1252,7 @@ a {
 .area {
     position: relative;
 
+    min-width: 0;
     min-height: 330px;
 
     padding: 1.5rem;
@@ -1256,6 +1323,7 @@ a {
 .featured-project {
     position: relative;
 
+    min-width: 0;
     min-height: 520px;
 
     border: 1px solid var(--line);
@@ -1306,6 +1374,8 @@ a {
     align-items: center;
     justify-content: space-between;
 
+    min-width: 0;
+
     color: var(--accent);
 
     font-family: var(--mono);
@@ -1318,6 +1388,8 @@ a {
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
+
+    min-width: 0;
 }
 
 .tag-list span {
@@ -1335,11 +1407,13 @@ a {
 
 .project-content {
     position: absolute;
+    right: auto;
     left: 8%;
     bottom: 8%;
     z-index: 2;
 
     max-width: 570px;
+    min-width: 0;
 }
 
 .project-kicker {
@@ -1360,6 +1434,8 @@ a {
     font-size: clamp(4rem, 8vw, 9rem);
     line-height: 0.82;
     letter-spacing: -0.07em;
+
+    overflow-wrap: anywhere;
 }
 
 .project-content > p:not(.project-kicker) {
@@ -1376,12 +1452,15 @@ a {
 .project-grid {
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    min-width: 0;
 
     border-left: 1px solid var(--line);
 }
 
 .project-placeholder {
+    min-width: 0;
     min-height: 230px;
 
     padding: 1.5rem;
@@ -1426,6 +1505,8 @@ a {
         minmax(300px, 0.8fr)
         minmax(0, 1.2fr);
 
+    min-width: 0;
+
     gap: clamp(3rem, 9vw, 10rem);
 }
 
@@ -1443,7 +1524,9 @@ a {
 .engineering-subjects {
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    min-width: 0;
 
     border-top: 1px solid var(--line);
     border-left: 1px solid var(--line);
@@ -1455,6 +1538,7 @@ a {
     display: flex;
     align-items: center;
 
+    min-width: 0;
     min-height: 75px;
 
     padding: 1rem 1.25rem;
@@ -1475,6 +1559,8 @@ a {
 
 .engineering-subjects span::before {
     content: "+";
+
+    flex-shrink: 0;
 
     margin-right: 0.7rem;
 
@@ -1497,6 +1583,8 @@ a {
     grid-template-columns:
         minmax(300px, 0.75fr)
         minmax(0, 1.25fr);
+
+    min-width: 0;
 
     gap: clamp(3rem, 9vw, 10rem);
 }
@@ -1522,6 +1610,8 @@ a {
     align-items: flex-end;
     justify-content: space-between;
 
+    min-width: 0;
+
     gap: 2rem;
 
     margin-bottom: 3rem;
@@ -1538,14 +1628,20 @@ a {
     letter-spacing: -0.06em;
 }
 
-.article-grid {
+.article-grid,
+.articles-grid {
     width: 100%;
+    min-width: 0;
 }
 
-.article-grid > .articles-grid {
+.article-grid > .articles-grid,
+.article-grid.articles-grid,
+.articles-grid {
     display: grid;
 
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    min-width: 0;
 
     border-top: 1px solid var(--line);
     border-left: 1px solid var(--line);
@@ -1579,12 +1675,16 @@ a {
     grid-template-columns:
         minmax(0, 1.35fr)
         minmax(320px, 0.65fr);
+
+    min-width: 0;
 }
 
 .article-card-media {
     position: relative;
 
     display: block;
+
+    min-width: 0;
 
     aspect-ratio: 16 / 10;
 
@@ -1605,6 +1705,7 @@ a {
 .article-card-media img {
     width: 100%;
     height: 100%;
+    max-width: none;
 
     object-fit: cover;
 
@@ -1648,6 +1749,7 @@ a {
     position: absolute;
     top: 1rem;
     left: 1rem;
+    z-index: 2;
 
     display: flex;
     align-items: center;
@@ -1674,6 +1776,8 @@ a {
     flex: 1;
     flex-direction: column;
 
+    min-width: 0;
+
     padding: 1.5rem;
 }
 
@@ -1686,6 +1790,8 @@ a {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.45rem;
+
+    min-width: 0;
 
     margin-bottom: 1.4rem;
 
@@ -1714,6 +1820,8 @@ a {
     font-size: clamp(1.5rem, 2vw, 2.2rem);
     line-height: 1;
     letter-spacing: -0.04em;
+
+    overflow-wrap: anywhere;
 }
 
 .article-card-featured .article-card-title {
@@ -1747,6 +1855,7 @@ a {
     gap: 0.5rem;
 
     width: fit-content;
+    max-width: 100%;
 
     margin-top: auto;
     padding-top: 2rem;
@@ -1758,6 +1867,8 @@ a {
     letter-spacing: 0.04em;
     text-decoration: none;
     text-transform: uppercase;
+
+    overflow-wrap: anywhere;
 }
 
 .article-card-link:hover {
@@ -1765,6 +1876,8 @@ a {
 }
 
 .article-card-arrow {
+    flex-shrink: 0;
+
     transition: transform var(--fast) ease;
 }
 
@@ -1797,6 +1910,8 @@ a {
 
 .contact-content {
     position: relative;
+
+    min-width: 0;
 }
 
 .contact-content h2 {
@@ -1808,6 +1923,8 @@ a {
     font-size: clamp(4rem, 9vw, 10rem);
     line-height: 0.82;
     letter-spacing: -0.075em;
+
+    overflow-wrap: anywhere;
 }
 
 .contact-lead {
@@ -1826,6 +1943,8 @@ a {
     flex-wrap: wrap;
     gap: 2rem;
 
+    min-width: 0;
+
     margin-top: 3rem;
 }
 
@@ -1833,6 +1952,8 @@ a {
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
+
+    max-width: 100%;
 
     padding-bottom: 0.5rem;
 
@@ -1845,6 +1966,8 @@ a {
     text-decoration: none;
     text-transform: uppercase;
 
+    overflow-wrap: anywhere;
+
     transition:
         color var(--fast) ease,
         border-color var(--fast) ease;
@@ -1856,6 +1979,8 @@ a {
 }
 
 .contact-link span {
+    flex-shrink: 0;
+
     transition: transform var(--fast) ease;
 }
 
@@ -1881,6 +2006,8 @@ a {
 
     align-items: center;
 
+    min-width: 0;
+
     gap: 2rem;
 }
 
@@ -1888,6 +2015,8 @@ a {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
+
+    min-width: 0;
 }
 
 .footer-brand strong {
@@ -1909,6 +2038,8 @@ a {
     display: flex;
     flex-wrap: wrap;
     gap: 1.1rem;
+
+    min-width: 0;
 }
 
 .footer-links a {
@@ -1936,6 +2067,7 @@ a {
     left: 1rem;
     z-index: 2000;
 
+    width: auto;
     max-width: 1100px;
 
     margin-inline: auto;
@@ -1945,12 +2077,16 @@ a {
     background: var(--surface);
 
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+
+    overflow: hidden;
 }
 
 .consent-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    min-width: 0;
 
     gap: 2rem;
 
@@ -1993,10 +2129,13 @@ a {
     position: fixed;
     inset: 0;
     z-index: 2100;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .consent-modal-backdrop {
-    position: absolute;
+    position: fixed;
     inset: 0;
 
     background: rgba(0, 0, 0, 0.72);
@@ -2013,19 +2152,25 @@ a {
         620px
     );
 
-    margin: 8vh auto 0;
+    max-width: 100%;
+
+    margin: 8vh auto 2rem;
 
     border: 1px solid var(--line-strong);
 
     background: var(--surface);
 
     box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+
+    overflow: hidden;
 }
 
 .consent-dialog-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
+    min-width: 0;
 
     padding: 1.5rem;
 
@@ -2059,6 +2204,8 @@ a {
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
     width: 34px;
     height: 34px;
 
@@ -2085,12 +2232,16 @@ a {
 
 .consent-options {
     padding-inline: 1.5rem;
+
+    min-width: 0;
 }
 
 .consent-option {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    min-width: 0;
 
     gap: 2rem;
 
@@ -2116,6 +2267,8 @@ a {
 }
 
 .consent-required {
+    flex-shrink: 0;
+
     color: var(--faint);
 
     font-family: var(--mono);
@@ -2194,6 +2347,8 @@ a {
     display: flex;
     justify-content: flex-end;
 
+    min-width: 0;
+
     gap: 0.5rem;
 
     padding: 1.5rem;
@@ -2210,6 +2365,7 @@ a {
         850px
     );
 
+    max-width: calc(100vw - 2rem);
     max-height: calc(100vh - 2rem);
 
     padding: 0;
@@ -2238,6 +2394,8 @@ a {
 }
 
 .dialog-content {
+    min-width: 0;
+
     padding: clamp(2rem, 5vw, 4rem);
 }
 
@@ -2248,6 +2406,8 @@ a {
     font-size: clamp(3rem, 7vw, 6rem);
     line-height: 0.85;
     letter-spacing: -0.065em;
+
+    overflow-wrap: anywhere;
 }
 
 .dialog-lead {
@@ -2287,6 +2447,8 @@ a {
    ========================================================= */
 
 .article-page main {
+    min-width: 0;
+
     padding-top: 0;
 }
 
@@ -2305,6 +2467,7 @@ a {
     z-index: 2;
 
     max-width: 1120px;
+    min-width: 0;
 
     padding-top: 48px;
     padding-bottom: 72px;
@@ -2347,6 +2510,8 @@ a {
     align-items: center;
     gap: 9px;
 
+    min-width: 0;
+
     margin-bottom: 24px;
 
     color: var(--muted);
@@ -2377,6 +2542,8 @@ a {
     letter-spacing: -0.065em;
     line-height: 0.92;
     text-wrap: balance;
+
+    overflow-wrap: anywhere;
 }
 
 .article-description {
@@ -2473,6 +2640,8 @@ a {
 
     justify-content: center;
 
+    min-width: 0;
+
     column-gap: 80px;
 
     align-items: start;
@@ -2519,10 +2688,14 @@ a {
     display: flex;
     flex-direction: column;
     gap: 2px;
+
+    min-width: 0;
 }
 
 .article-toc a {
     display: block;
+
+    min-width: 0;
 
     padding: 7px 10px;
 
@@ -2534,6 +2707,8 @@ a {
     font-size: 0.67rem;
     line-height: 1.5;
     text-decoration: none;
+
+    overflow-wrap: anywhere;
 
     transition:
         color var(--fast) ease,
@@ -2569,6 +2744,8 @@ a {
 
     font-size: 1.04rem;
     line-height: 1.85;
+
+    overflow-wrap: break-word;
 }
 
 .article-content > *:first-child {
@@ -2597,6 +2774,8 @@ a {
 
     letter-spacing: -0.035em;
     line-height: 1.08;
+
+    overflow-wrap: anywhere;
 }
 
 .article-content h2 {
@@ -2633,6 +2812,8 @@ a {
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
+
+    overflow-wrap: anywhere;
 }
 
 .article-content a:hover {
@@ -2699,10 +2880,14 @@ a {
 
     font-family: var(--mono);
     font-size: 0.82em;
+
+    overflow-wrap: anywhere;
 }
 
 .article-content pre {
     position: relative;
+
+    max-width: 100%;
 
     margin: 2.2rem 0;
 
@@ -2713,6 +2898,7 @@ a {
     background: var(--surface);
 
     overflow-x: auto;
+    overflow-y: hidden;
 
     -webkit-overflow-scrolling: touch;
 }
@@ -2734,6 +2920,9 @@ a {
 .article-content pre code {
     display: block;
 
+    width: max-content;
+    min-width: 100%;
+
     padding: 0;
 
     border: 0;
@@ -2747,6 +2936,8 @@ a {
     line-height: 1.75;
 
     white-space: pre;
+
+    overflow-wrap: normal;
 }
 
 .article-content kbd {
@@ -2772,6 +2963,7 @@ a {
 
     width: 100%;
     height: auto;
+    max-width: 100%;
 
     margin: 2.8rem 0;
 
@@ -2779,7 +2971,11 @@ a {
 }
 
 .article-content figure {
+    max-width: 100%;
+
     margin: 2.8rem 0;
+
+    overflow: hidden;
 }
 
 .article-content figure img {
@@ -2803,12 +2999,16 @@ a {
 
 .article-content .table-wrapper {
     width: 100%;
+    max-width: 100%;
 
     margin: 2.5rem 0;
 
     overflow-x: auto;
+    overflow-y: hidden;
 
     border: 1px solid var(--line);
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .article-content table {
@@ -2858,6 +3058,8 @@ a {
    ========================================================= */
 
 .article-content .callout {
+    max-width: 100%;
+
     margin: 2.5rem 0;
 
     padding: 22px 24px;
@@ -2865,6 +3067,8 @@ a {
     border: 1px solid var(--line);
 
     background: var(--surface);
+
+    overflow-wrap: break-word;
 }
 
 .article-content .callout strong {
@@ -2966,7 +3170,7 @@ a {
     }
 
     .areas-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .philosophy-grid,
@@ -2980,7 +3184,9 @@ a {
         left: 6%;
     }
 
-    .article-grid {
+    .article-grid > .articles-grid,
+    .article-grid.articles-grid,
+    .articles-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -3068,7 +3274,7 @@ a {
     }
 
     .header-inner {
-        width: calc(100% - 2rem);
+        width: 100%;
     }
 
     .header-actions {
@@ -3082,6 +3288,10 @@ a {
     .x-link,
     .social-link {
         display: none;
+    }
+
+    .mobile-nav {
+        padding: 1rem;
     }
 
     .hero {
@@ -3179,6 +3389,8 @@ a {
         right: 1.5rem;
         bottom: 1.5rem;
         left: 1.5rem;
+
+        max-width: none;
     }
 
     .project-content h2 {
@@ -3198,22 +3410,61 @@ a {
         flex-direction: column;
     }
 
-    .article-grid {
+    /*
+     * Fix Writing section layout.
+     * The original CSS styled .article-grid but the actual
+     * article collection can be .articles-grid.
+     */
+    .article-grid > .articles-grid,
+    .article-grid.articles-grid,
+    .articles-grid {
         grid-template-columns: 1fr;
     }
 
-    .article-card-image {
+    /*
+     * Featured writing card must also collapse.
+     * Its desktop 1.35fr / 0.65fr layout was causing
+     * horizontal overflow on small screens.
+     */
+    .article-card-featured {
+        grid-column: 1 / -1;
+
+        grid-template-columns: 1fr;
+    }
+
+    .article-card-featured .article-card-media {
+        min-height: 0;
+
+        aspect-ratio: 16 / 10;
+
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .article-card-featured .article-card-body {
+        padding: 1.5rem;
+    }
+
+    .article-card-media {
         aspect-ratio: 16 / 10;
     }
 
-    .article-card-content {
+    /*
+     * These were targeting older class names.
+     * Keep the current article-card structure consistent.
+     */
+    .article-card-body {
         padding: 1.25rem;
     }
 
-    .article-card-content h3 {
+    .article-card-title {
         max-width: 15ch;
 
         font-size: 1.75rem;
+    }
+
+    .article-card-featured .article-card-title {
+        font-size: clamp(2rem, 10vw, 3.2rem);
     }
 
     .contact-content h2 {
@@ -3341,14 +3592,22 @@ a {
     }
 
     .article-content pre {
-        margin-right: -0.5rem;
-        margin-left: -0.5rem;
+        margin-right: 0;
+        margin-left: 0;
 
         padding: 18px;
     }
 
     .article-content blockquote {
         padding-left: 18px;
+    }
+
+    .article-content .table-wrapper {
+        width: 100%;
+    }
+
+    .article-content .callout {
+        padding: 18px;
     }
 }
 
@@ -3360,6 +3619,14 @@ a {
 @media (max-width: 420px) {
     .container {
         width: calc(100% - 1.5rem);
+    }
+
+    .mobile-nav {
+        padding: 0.75rem;
+    }
+
+    .mobile-nav a {
+        font-size: 1.7rem;
     }
 
     .hero-title {
@@ -3390,6 +3657,10 @@ a {
         flex-direction: column;
     }
 
+    .article-card-featured .article-card-body {
+        padding: 1.25rem;
+    }
+
     .consent-banner {
         right: 0.5rem;
         bottom: 0.5rem;
@@ -3411,10 +3682,15 @@ a {
 
     .project-dialog {
         width: calc(100% - 1rem);
+        max-width: calc(100vw - 1rem);
     }
 
     .dialog-content {
         padding: 2rem 1.25rem;
+    }
+
+    .article-cover {
+        width: calc(100% - 1rem);
     }
 }
 
