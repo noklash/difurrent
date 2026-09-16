@@ -566,7 +566,7 @@ a {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1001;
+    z-index: 1100;
 
     display: flex;
     flex-direction: column;
@@ -605,6 +605,13 @@ body.nav-open .mobile-nav {
     visibility: visible;
     pointer-events: auto;
     transform: translateY(0);
+}
+
+/* Prevent header backdrop-filter from creating a containing block
+   that clips/positions the fixed mobile nav incorrectly */
+body.nav-open .site-header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .mobile-nav a {
