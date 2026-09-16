@@ -577,7 +577,10 @@ a {
 
     padding: 1.5rem;
 
-    background: var(--bg);
+    border-top: 1px solid var(--line);
+
+    background-color: var(--bg);
+    color: var(--text);
 
     overflow-x: hidden;
     overflow-y: auto;
@@ -586,6 +589,8 @@ a {
 
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
+
     transform: translateY(-10px);
 
     transition:
@@ -594,9 +599,11 @@ a {
         transform var(--normal) var(--ease);
 }
 
-.mobile-nav.is-open {
+.mobile-nav.is-open,
+body.nav-open .mobile-nav {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: translateY(0);
 }
 
