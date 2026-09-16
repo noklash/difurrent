@@ -1,8 +1,8 @@
 /* =========================================================
    DIFURRENT
    Global stylesheet
+   Responsive production stylesheet
    ========================================================= */
-
 
 
 /* =========================================================
@@ -24,7 +24,6 @@
     font-weight: 700;
     font-display: swap;
 }
-
 
 
 /* =========================================================
@@ -50,6 +49,14 @@
 
     --header-height: 72px;
     --content-width: 1440px;
+
+    --page-gutter: clamp(1rem, 3vw, 3rem);
+
+    /* Article geometry */
+    --article-width: 1280px;
+    --article-reading-width: 800px;
+    --article-toc-width: 220px;
+    --article-gap: clamp(2.5rem, 5vw, 5rem);
 
     --mono:
         "IBM Plex Mono",
@@ -98,7 +105,6 @@
 }
 
 
-
 /* =========================================================
    03. RESET
    ========================================================= */
@@ -117,6 +123,7 @@ html {
 
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     background: var(--bg);
     color: var(--text);
@@ -134,12 +141,14 @@ body.nav-open {
 
 img,
 svg,
-video {
+video,
+canvas {
     display: block;
     max-width: 100%;
 }
 
-img {
+img,
+video {
     height: auto;
 }
 
@@ -147,6 +156,7 @@ button,
 input,
 textarea,
 select {
+    max-width: 100%;
     font: inherit;
 }
 
@@ -166,7 +176,6 @@ a {
 [hidden] {
     display: none !important;
 }
-
 
 
 /* =========================================================
@@ -198,14 +207,13 @@ a {
 }
 
 
-
 /* =========================================================
    05. GLOBAL LAYOUT
    ========================================================= */
 
 .container {
     width: min(
-        calc(100% - 3rem),
+        calc(100% - (var(--page-gutter) * 2)),
         var(--content-width)
     );
     min-width: 0;
@@ -236,7 +244,7 @@ a {
     content: "";
     width: 22px;
     height: 1px;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     background: var(--accent);
 }
 
@@ -245,15 +253,13 @@ a {
 }
 
 
-
 /* =========================================================
    06. HEADER
    ========================================================= */
 
 .site-header {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0 0 auto;
     z-index: 1000;
     width: 100%;
     height: var(--header-height);
@@ -280,6 +286,7 @@ a {
     display: inline-flex;
     align-items: center;
     min-width: 0;
+    flex-shrink: 0;
     color: var(--text);
     font-family: var(--display);
     font-size: 0.9rem;
@@ -292,7 +299,7 @@ a {
     content: "";
     width: 6px;
     height: 6px;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     margin-right: 0.55rem;
     background: var(--accent);
     animation: wordmarkPulse 3s ease-in-out infinite;
@@ -312,8 +319,10 @@ a {
 .desktop-nav {
     display: flex;
     align-items: center;
-    gap: 1.7rem;
+    justify-content: center;
+    gap: clamp(1rem, 1.7vw, 1.7rem);
     min-width: 0;
+    margin-inline: 2rem;
 }
 
 .desktop-nav a,
@@ -326,6 +335,7 @@ a {
     letter-spacing: 0.04em;
     text-decoration: none;
     text-transform: uppercase;
+    white-space: nowrap;
     transition: color var(--fast) ease;
 }
 
@@ -358,8 +368,10 @@ a {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: flex-end;
+    gap: clamp(0.65rem, 1vw, 1rem);
     min-width: 0;
+    flex-shrink: 0;
 }
 
 .x-link,
@@ -369,7 +381,6 @@ a {
     justify-content: center;
     min-width: 20px;
 }
-
 
 
 /* =========================================================
@@ -401,7 +412,7 @@ a {
     content: "";
     width: 7px;
     height: 7px;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     border: 1px solid currentColor;
     border-radius: 50%;
 }
@@ -410,12 +421,11 @@ a {
     position: fixed;
     top: calc(var(--header-height) - 2px);
     right: max(
-        1.5rem,
+        1rem,
         calc((100vw - var(--content-width)) / 2)
     );
     z-index: 1100;
-    width: 150px;
-    max-width: calc(100vw - 2rem);
+    width: min(150px, calc(100vw - 2rem));
     padding: 0.35rem;
     border: 1px solid var(--line-strong);
     background: var(--surface);
@@ -427,6 +437,7 @@ a {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    min-height: 42px;
     padding: 0.7rem;
     border: 0;
     background: transparent;
@@ -451,7 +462,6 @@ a {
 }
 
 
-
 /* =========================================================
    08. MOBILE MENU
    ========================================================= */
@@ -459,7 +469,7 @@ a {
 .menu-toggle {
     display: none;
     position: relative;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     width: 34px;
     height: 34px;
     padding: 0;
@@ -499,9 +509,14 @@ a {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 100vw;
+    max-width: 100%;
     min-width: 0;
-    padding: 1.5rem;
+    height: calc(100dvh - var(--header-height));
+    padding:
+        1rem
+        max(1rem, env(safe-area-inset-right))
+        max(1rem, env(safe-area-inset-bottom))
+        max(1rem, env(safe-area-inset-left));
     border-top: 1px solid var(--line);
     background-color: var(--bg);
     color: var(--text);
@@ -538,25 +553,25 @@ body.nav-open .site-header {
     justify-content: space-between;
     width: 100%;
     min-width: 0;
-    padding: 1.1rem 0;
+    padding: clamp(0.9rem, 3vw, 1.1rem) 0;
     border-bottom: 1px solid var(--line);
     color: var(--text);
     font-family: var(--display);
-    font-size: 2rem;
+    font-size: clamp(1.7rem, 7vw, 2rem);
     letter-spacing: -0.04em;
+    line-height: 1;
     text-decoration: none;
     overflow-wrap: anywhere;
 }
 
 .mobile-nav a::after {
     content: "↗";
-    flex-shrink: 0;
+    flex: 0 0 auto;
     margin-left: 1rem;
     color: var(--accent);
     font-family: var(--mono);
     font-size: 0.8rem;
 }
-
 
 
 /* =========================================================
@@ -566,6 +581,7 @@ body.nav-open .site-header {
 .hero {
     position: relative;
     min-height: 100vh;
+    min-height: 100dvh;
     padding-top: var(--header-height);
     overflow: hidden;
     border-bottom: 1px solid var(--line);
@@ -586,7 +602,7 @@ body.nav-open .site-header {
             var(--line) 1px,
             transparent 1px
         );
-    background-size: 80px 80px;
+    background-size: clamp(55px, 5vw, 80px) clamp(55px, 5vw, 80px);
     opacity: 0.28;
     pointer-events: none;
 }
@@ -620,13 +636,14 @@ body.nav-open .site-header {
     z-index: 2;
     display: grid;
     grid-template-columns:
-        minmax(70px, 0.16fr)
+        minmax(45px, 0.16fr)
         minmax(0, 1.1fr)
-        minmax(340px, 0.85fr);
+        minmax(280px, 0.85fr);
     align-items: center;
     min-height: calc(100vh - var(--header-height));
+    min-height: calc(100dvh - var(--header-height));
     min-width: 0;
-    gap: clamp(2rem, 5vw, 6rem);
+    gap: clamp(1.5rem, 5vw, 6rem);
 }
 
 .hero-index {
@@ -634,7 +651,7 @@ body.nav-open .site-header {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    padding-top: 8rem;
+    padding-top: clamp(4rem, 8vw, 8rem);
     color: var(--faint);
     font-family: var(--mono);
     font-size: 0.58rem;
@@ -651,14 +668,14 @@ body.nav-open .site-header {
 
 .hero-content {
     min-width: 0;
-    padding-block: 6rem;
+    padding-block: clamp(4rem, 6vw, 6rem);
 }
 
 .hero-title {
     max-width: 10ch;
     margin: 0;
     font-family: var(--display);
-    font-size: clamp(3.5rem, 6.8vw, 8rem);
+    font-size: clamp(3.2rem, 6.8vw, 8rem);
     font-weight: 700;
     line-height: 0.88;
     letter-spacing: -0.065em;
@@ -667,7 +684,7 @@ body.nav-open .site-header {
 
 .hero-description {
     max-width: 48ch;
-    margin: 2.25rem 0 0;
+    margin: clamp(1.75rem, 3vw, 2.25rem) 0 0;
     color: var(--muted);
     font-size: clamp(1rem, 1.25vw, 1.15rem);
     line-height: 1.7;
@@ -679,7 +696,6 @@ body.nav-open .site-header {
     gap: 0.65rem;
     margin-top: 2rem;
 }
-
 
 
 /* =========================================================
@@ -749,11 +765,12 @@ body.nav-open .site-header {
 .system-header,
 .system-footer {
     position: absolute;
-    right: 1rem;
-    left: 1rem;
+    right: clamp(0.65rem, 2vw, 1rem);
+    left: clamp(0.65rem, 2vw, 1rem);
     z-index: 5;
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
     min-width: 0;
     color: var(--faint);
     font-family: var(--mono);
@@ -763,11 +780,11 @@ body.nav-open .site-header {
 }
 
 .system-header {
-    top: 1rem;
+    top: clamp(0.65rem, 2vw, 1rem);
 }
 
 .system-footer {
-    bottom: 1rem;
+    bottom: clamp(0.65rem, 2vw, 1rem);
 }
 
 .system-footer span:first-child {
@@ -779,7 +796,6 @@ body.nav-open .site-header {
     inset: 0;
     overflow: hidden;
 }
-
 
 
 /* =========================================================
@@ -843,7 +859,6 @@ body.nav-open .site-header {
         box-shadow: 0 0 0 8px transparent;
     }
 }
-
 
 
 /* =========================================================
@@ -920,7 +935,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    13. BUTTONS
    ========================================================= */
@@ -939,6 +953,8 @@ body.nav-open .site-header {
     font-family: var(--mono);
     font-size: 0.62rem;
     letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-align: center;
     text-decoration: none;
     text-transform: uppercase;
     transition:
@@ -970,7 +986,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    14. TEXT BUTTON
    ========================================================= */
@@ -980,6 +995,7 @@ body.nav-open .site-header {
     align-items: center;
     gap: 0.5rem;
     width: fit-content;
+    max-width: 100%;
     min-width: 0;
     padding: 0;
     border: 0;
@@ -1006,7 +1022,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    15. PHILOSOPHY
    ========================================================= */
@@ -1014,7 +1029,7 @@ body.nav-open .site-header {
 .philosophy-grid {
     display: grid;
     grid-template-columns:
-        minmax(300px, 0.75fr)
+        minmax(0, 0.75fr)
         minmax(0, 1.25fr);
     min-width: 0;
     gap: clamp(3rem, 9vw, 10rem);
@@ -1047,7 +1062,6 @@ body.nav-open .site-header {
     font-family: var(--display);
     font-size: 1.2rem;
 }
-
 
 
 /* =========================================================
@@ -1104,6 +1118,7 @@ body.nav-open .site-header {
     font-size: clamp(1.7rem, 2.4vw, 2.5rem);
     line-height: 1;
     letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
 }
 
 .area p {
@@ -1115,7 +1130,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    17. WORK
    ========================================================= */
@@ -1123,7 +1137,7 @@ body.nav-open .site-header {
 .featured-project {
     position: relative;
     min-width: 0;
-    min-height: 520px;
+    min-height: clamp(460px, 45vw, 520px);
     border: 1px solid var(--line);
     overflow: hidden;
     background:
@@ -1151,19 +1165,20 @@ body.nav-open .site-header {
             var(--line) 1px,
             transparent 1px
         );
-    background-size: 70px 70px;
+    background-size: clamp(55px, 5vw, 70px) clamp(55px, 5vw, 70px);
     opacity: 0.2;
 }
 
 .project-meta {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    left: 1.5rem;
+    top: clamp(1rem, 2vw, 1.5rem);
+    right: clamp(1rem, 2vw, 1.5rem);
+    left: clamp(1rem, 2vw, 1.5rem);
     z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     min-width: 0;
     color: var(--accent);
     font-family: var(--mono);
@@ -1191,9 +1206,9 @@ body.nav-open .site-header {
 
 .project-content {
     position: absolute;
-    right: auto;
-    left: 8%;
-    bottom: 8%;
+    right: clamp(1rem, 5vw, 8%);
+    bottom: clamp(1.5rem, 6vw, 8%);
+    left: clamp(1rem, 5vw, 8%);
     z-index: 2;
     max-width: 570px;
     min-width: 0;
@@ -1211,7 +1226,7 @@ body.nav-open .site-header {
 .project-content h2 {
     margin: 0;
     font-family: var(--display);
-    font-size: clamp(4rem, 8vw, 9rem);
+    font-size: clamp(3.5rem, 8vw, 9rem);
     line-height: 0.82;
     letter-spacing: -0.07em;
     overflow-wrap: anywhere;
@@ -1250,6 +1265,7 @@ body.nav-open .site-header {
     margin: 4rem 0 0.75rem;
     font-family: var(--display);
     font-size: 1.4rem;
+    overflow-wrap: anywhere;
 }
 
 .project-placeholder p {
@@ -1260,7 +1276,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    18. ENGINEERING NOTE
    ========================================================= */
@@ -1268,7 +1283,7 @@ body.nav-open .site-header {
 .engineering-grid {
     display: grid;
     grid-template-columns:
-        minmax(300px, 0.8fr)
+        minmax(0, 0.8fr)
         minmax(0, 1.2fr);
     min-width: 0;
     gap: clamp(3rem, 9vw, 10rem);
@@ -1303,7 +1318,9 @@ body.nav-open .site-header {
     color: var(--muted);
     font-family: var(--mono);
     font-size: 0.65rem;
+    line-height: 1.4;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
     transition:
         color var(--fast) ease,
         background-color var(--fast) ease;
@@ -1311,7 +1328,7 @@ body.nav-open .site-header {
 
 .engineering-subjects span::before {
     content: "+";
-    flex-shrink: 0;
+    flex: 0 0 auto;
     margin-right: 0.7rem;
     color: var(--accent);
 }
@@ -1322,7 +1339,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    19. ABOUT
    ========================================================= */
@@ -1330,7 +1346,7 @@ body.nav-open .site-header {
 .about-grid {
     display: grid;
     grid-template-columns:
-        minmax(300px, 0.75fr)
+        minmax(0, 0.75fr)
         minmax(0, 1.25fr);
     min-width: 0;
     gap: clamp(3rem, 9vw, 10rem);
@@ -1344,7 +1360,6 @@ body.nav-open .site-header {
     line-height: 0.88;
     letter-spacing: -0.06em;
 }
-
 
 
 /* =========================================================
@@ -1369,7 +1384,6 @@ body.nav-open .site-header {
     letter-spacing: -0.06em;
 }
 
-/* Single source of truth for the listing grid */
 .article-grid,
 .articles-grid {
     display: grid;
@@ -1381,7 +1395,6 @@ body.nav-open .site-header {
     border-left: 1px solid var(--line);
 }
 
-/* Nested case: children participate in parent grid */
 .article-grid > .articles-grid {
     display: contents;
 }
@@ -1394,6 +1407,7 @@ body.nav-open .site-header {
     border-right: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     background: var(--bg);
+    overflow: hidden;
     transition: background-color var(--normal) ease;
 }
 
@@ -1404,7 +1418,9 @@ body.nav-open .site-header {
 .article-card-featured {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
+    grid-template-columns:
+        minmax(0, 1.4fr)
+        minmax(0, 0.6fr);
     min-width: 0;
 }
 
@@ -1419,7 +1435,7 @@ body.nav-open .site-header {
 }
 
 .article-card-featured .article-card-media {
-    min-height: 400px;
+    min-height: 0;
     aspect-ratio: auto;
     border-right: 1px solid var(--line);
     border-bottom: 0;
@@ -1447,7 +1463,7 @@ body.nav-open .site-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.25rem;
+    padding: clamp(1rem, 2vw, 1.25rem);
     background: var(--surface-strong);
     color: var(--muted);
     font-family: var(--mono);
@@ -1484,11 +1500,11 @@ body.nav-open .site-header {
     flex: 1;
     flex-direction: column;
     min-width: 0;
-    padding: 1.5rem;
+    padding: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
 .article-card-featured .article-card-body {
-    padding: 2rem 2.25rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .article-card-meta {
@@ -1502,6 +1518,7 @@ body.nav-open .site-header {
     font-family: var(--mono);
     font-size: 0.58rem;
     letter-spacing: 0.04em;
+    line-height: 1.4;
     text-transform: uppercase;
 }
 
@@ -1557,6 +1574,7 @@ body.nav-open .site-header {
     font-family: var(--mono);
     font-size: 0.6rem;
     letter-spacing: 0.04em;
+    line-height: 1.4;
     text-decoration: none;
     text-transform: uppercase;
     overflow-wrap: anywhere;
@@ -1567,7 +1585,7 @@ body.nav-open .site-header {
 }
 
 .article-card-arrow {
-    flex-shrink: 0;
+    flex: 0 0 auto;
     transition: transform var(--fast) ease;
 }
 
@@ -1584,7 +1602,6 @@ body.nav-open .site-header {
     font-family: var(--mono);
     font-size: 0.65rem;
 }
-
 
 
 /* =========================================================
@@ -1636,6 +1653,7 @@ body.nav-open .site-header {
     color: var(--text);
     font-family: var(--mono);
     font-size: 0.65rem;
+    line-height: 1.4;
     text-decoration: none;
     text-transform: uppercase;
     overflow-wrap: anywhere;
@@ -1650,14 +1668,13 @@ body.nav-open .site-header {
 }
 
 .contact-link span {
-    flex-shrink: 0;
+    flex: 0 0 auto;
     transition: transform var(--fast) ease;
 }
 
 .contact-link:hover span {
     transform: translate(3px, -3px);
 }
-
 
 
 /* =========================================================
@@ -1671,7 +1688,7 @@ body.nav-open .site-header {
 
 .footer-inner {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
     min-width: 0;
     gap: 2rem;
@@ -1695,6 +1712,7 @@ body.nav-open .site-header {
     font-family: var(--mono);
     font-size: 0.56rem;
     letter-spacing: 0.04em;
+    line-height: 1.4;
     text-transform: uppercase;
 }
 
@@ -1718,16 +1736,15 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    23. CONSENT BANNER
    ========================================================= */
 
 .consent-banner {
     position: fixed;
-    right: 1rem;
-    bottom: 1rem;
-    left: 1rem;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    left: max(1rem, env(safe-area-inset-left));
     z-index: 2000;
     width: auto;
     max-width: 1100px;
@@ -1770,7 +1787,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    24. CONSENT MODAL
    ========================================================= */
@@ -1779,8 +1795,13 @@ body.nav-open .site-header {
     position: fixed;
     inset: 0;
     z-index: 2100;
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
+    padding:
+        max(1rem, env(safe-area-inset-top))
+        max(1rem, env(safe-area-inset-right))
+        max(1rem, env(safe-area-inset-bottom))
+        max(1rem, env(safe-area-inset-left));
 }
 
 .consent-modal-backdrop {
@@ -1793,10 +1814,7 @@ body.nav-open .site-header {
 .consent-dialog {
     position: relative;
     z-index: 1;
-    width: min(
-        calc(100% - 2rem),
-        620px
-    );
+    width: min(620px, 100%);
     max-width: 100%;
     margin: 8vh auto 2rem;
     border: 1px solid var(--line-strong);
@@ -1810,6 +1828,7 @@ body.nav-open .site-header {
     align-items: flex-start;
     justify-content: space-between;
     min-width: 0;
+    gap: 1.5rem;
     padding: 1.5rem;
     border-bottom: 1px solid var(--line);
 }
@@ -1827,7 +1846,7 @@ body.nav-open .site-header {
 .consent-dialog h2 {
     margin: 0;
     font-family: var(--display);
-    font-size: 2rem;
+    font-size: clamp(1.7rem, 5vw, 2rem);
     line-height: 1;
     letter-spacing: -0.04em;
 }
@@ -1836,7 +1855,7 @@ body.nav-open .site-header {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     width: 34px;
     height: 34px;
     padding: 0;
@@ -1870,6 +1889,10 @@ body.nav-open .site-header {
     border-bottom: 1px solid var(--line);
 }
 
+.consent-option > div:first-child {
+    min-width: 0;
+}
+
 .consent-option strong {
     font-family: var(--display);
     font-size: 0.9rem;
@@ -1894,7 +1917,7 @@ body.nav-open .site-header {
 
 .switch {
     position: relative;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     width: 42px;
     height: 23px;
 }
@@ -1954,18 +1977,14 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    25. PROJECT DIALOG
    ========================================================= */
 
 .project-dialog {
-    width: min(
-        calc(100% - 2rem),
-        850px
-    );
-    max-width: calc(100vw - 2rem);
-    max-height: calc(100vh - 2rem);
+    width: min(850px, calc(100vw - 2rem));
+    max-width: 100%;
+    max-height: calc(100dvh - 2rem);
     padding: 0;
     border: 1px solid var(--line-strong);
     background: var(--surface);
@@ -2025,7 +2044,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    26. ARTICLE READER
    ========================================================= */
@@ -2037,7 +2055,7 @@ body.nav-open .site-header {
 
 .article-header {
     position: relative;
-    padding-top: calc(var(--header-height) + 72px);
+    padding-top: calc(var(--header-height) + clamp(3rem, 5vw, 4.5rem));
     border-bottom: 1px solid var(--line);
     overflow: hidden;
 }
@@ -2045,29 +2063,38 @@ body.nav-open .site-header {
 .article-header-inner {
     position: relative;
     z-index: 2;
-    width: min(calc(100% - 3rem), var(--content-width));
-    max-width: 1120px;
+
+    width: min(
+        calc(100% - (var(--page-gutter) * 2)),
+        var(--article-width)
+    );
+
     margin-inline: auto;
     min-width: 0;
-    padding-top: 48px;
-    padding-bottom: 72px;
+
+    padding-block:
+        clamp(2rem, 4vw, 3rem)
+        clamp(3rem, 6vw, 4.5rem);
 }
 
 .article-back {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 48px;
+    max-width: 100%;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
     color: var(--muted);
     font-family: var(--mono);
     font-size: 0.72rem;
     font-weight: 500;
     letter-spacing: 0.08em;
+    line-height: 1.4;
     text-decoration: none;
     text-transform: uppercase;
 }
 
 .article-back span {
+    flex: 0 0 auto;
     font-size: 1rem;
     transition: transform var(--fast) ease;
 }
@@ -2102,11 +2129,12 @@ body.nav-open .site-header {
 
 .article-header h1,
 .article-header-inner > h1 {
+    width: 100%;
     max-width: 18ch;
     margin: 0;
     color: var(--text);
     font-family: var(--display);
-    font-size: clamp(3.2rem, 6vw, 6.5rem);
+    font-size: clamp(3rem, 6vw, 6.5rem);
     font-weight: 700;
     letter-spacing: -0.065em;
     line-height: 0.92;
@@ -2128,9 +2156,9 @@ body.nav-open .site-header {
     font-family: var(--mono);
     font-size: 0.72rem;
     letter-spacing: 0.06em;
+    line-height: 1.5;
     text-transform: uppercase;
 }
-
 
 
 /* =========================================================
@@ -2139,9 +2167,16 @@ body.nav-open .site-header {
 
 .article-cover {
     position: relative;
-    width: min(1120px, calc(100% - 3rem));
-    min-height: 380px;
+
+    width: min(
+        calc(100% - (var(--page-gutter) * 2)),
+        var(--article-width)
+    );
+
+    min-height: clamp(220px, 35vw, 420px);
+
     margin-inline: auto;
+
     border: 1px solid var(--line);
     background: var(--surface);
     overflow: hidden;
@@ -2150,7 +2185,8 @@ body.nav-open .site-header {
 .article-cover::before {
     content: "";
     position: absolute;
-    inset: 18px;
+    inset: clamp(10px, 1.5vw, 18px);
+    z-index: 1;
     border: 1px solid rgba(127, 127, 127, 0.12);
     pointer-events: none;
 }
@@ -2159,8 +2195,9 @@ body.nav-open .site-header {
     content: "";
     position: absolute;
     top: 50%;
-    right: 18px;
-    left: 18px;
+    right: clamp(10px, 1.5vw, 18px);
+    left: clamp(10px, 1.5vw, 18px);
+    z-index: 1;
     height: 1px;
     background: rgba(127, 127, 127, 0.12);
     pointer-events: none;
@@ -2170,10 +2207,9 @@ body.nav-open .site-header {
     display: block;
     width: 100%;
     height: 100%;
-    min-height: 380px;
+    min-height: inherit;
     object-fit: cover;
 }
-
 
 
 /* =========================================================
@@ -2182,17 +2218,32 @@ body.nav-open .site-header {
 
 .article-layout {
     display: grid;
-    grid-template-columns: minmax(180px, 240px) minmax(0, 720px);
-    justify-content: center;
-    width: min(calc(100% - 3rem), 1120px);
-    margin-inline: auto;
-    min-width: 0;
-    column-gap: clamp(48px, 6vw, 88px);
-    align-items: start;
-    padding-top: 88px;
-    padding-bottom: 120px;
-}
 
+    grid-template-columns:
+        minmax(12rem, var(--article-toc-width))
+        minmax(0, 1fr);
+
+    width: min(
+        calc(100% - (var(--page-gutter) * 2)),
+        72rem
+    );
+
+    margin-inline: auto;
+
+    min-width: 0;
+
+    column-gap: clamp(
+        2rem,
+        5vw,
+        var(--article-gap)
+    );
+
+    align-items: start;
+
+    padding-block:
+        clamp(4rem, 7vw, 5.5rem)
+        clamp(5rem, 9vw, 7.5rem);
+}
 
 
 /* =========================================================
@@ -2201,63 +2252,81 @@ body.nav-open .site-header {
 
 .article-toc {
     position: sticky;
-    top: calc(var(--header-height) + 32px);
+    top: calc(var(--header-height) + 2rem);
+
     align-self: start;
+
     min-width: 0;
+    max-width: 100%;
 }
 
 .toc-label {
     display: block;
-    padding-bottom: 14px;
+
+    padding-bottom: 0.875rem;
+
     border-bottom: 1px solid var(--line);
+
     color: var(--faint);
+
     font-family: var(--mono);
     font-size: 0.66rem;
     font-weight: 500;
+
     letter-spacing: 0.1em;
+    line-height: 1.4;
+
     text-transform: uppercase;
 }
 
 .article-toc nav {
-    margin-top: 14px;
+    margin-top: 0.875rem;
 }
 
 .article-toc [data-toc-list] {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+
+    gap: 0.125rem;
+
     min-width: 0;
 }
 
 .article-toc a {
     display: block;
+
     min-width: 0;
-    padding: 7px 10px;
+
+    padding:
+        0.4375rem
+        0.625rem;
+
     border-left: 1px solid transparent;
+
     color: var(--faint);
+
     font-family: var(--mono);
     font-size: 0.67rem;
     line-height: 1.5;
+
     text-decoration: none;
+
     overflow-wrap: anywhere;
+
     transition:
         color var(--fast) ease,
         border-color var(--fast) ease,
         padding-left var(--fast) ease;
 }
 
-.article-toc a:hover {
-    padding-left: 14px;
-    border-left-color: var(--accent);
-    color: var(--text);
-}
-
+.article-toc a:hover,
 .article-toc a.is-active {
-    padding-left: 14px;
+    padding-left: 0.875rem;
+
     border-left-color: var(--accent);
+
     color: var(--text);
 }
-
 
 
 /* =========================================================
@@ -2266,10 +2335,53 @@ body.nav-open .site-header {
 
 .article-content {
     min-width: 0;
+    width: 100%;
+}
+
+
+/* =========================================================
+   31. ARTICLE LAYOUT RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+    .article-layout {
+        grid-template-columns: 1fr;
+
+        width: min(
+            calc(100% - (var(--page-gutter) * 2)),
+            48rem
+        );
+
+        row-gap: 3rem;
+    }
+
+    .article-toc,
+    .article-content {
+        grid-column: 1;
+    }
+
+    .article-toc {
+        position: static;
+    }
+}
+
+/* =========================================================
+   30. ARTICLE CONTENT
+   ========================================================= */
+
+.article-content {
+    width: 100%;
+    min-width: 0;
+    max-width: var(--article-reading-width);
     color: var(--text);
     font-size: 1.0625rem;
     line-height: 1.8;
     overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.article-content > * {
+    max-width: 100%;
 }
 
 .article-content > *:first-child {
@@ -2281,7 +2393,8 @@ body.nav-open .site-header {
 }
 
 .article-content p {
-    max-width: 68ch;
+    min-width: 100%;
+    min-width: 0;
     margin: 0 0 1.7em;
     color: var(--text);
 }
@@ -2289,6 +2402,7 @@ body.nav-open .site-header {
 .article-content h2,
 .article-content h3,
 .article-content h4 {
+    max-width: 100%;
     scroll-margin-top: 120px;
     color: var(--text);
     font-family: var(--display);
@@ -2296,20 +2410,21 @@ body.nav-open .site-header {
     letter-spacing: -0.035em;
     line-height: 1.08;
     overflow-wrap: anywhere;
+    text-wrap: balance;
 }
 
 .article-content h2 {
-    margin: 2.8em 0 0.8em;
+    margin: 1.8em 0 0.8em;
     font-size: clamp(2rem, 4vw, 3rem);
 }
 
 .article-content h3 {
-    margin: 2.3em 0 0.7em;
+    margin: 1.8em 0 0.7em;
     font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 .article-content h4 {
-    margin: 2em 0 0.65em;
+    margin: 1.8em 0 0.65em;
     font-size: 1.3rem;
 }
 
@@ -2336,14 +2451,17 @@ body.nav-open .site-header {
 
 .article-content ul,
 .article-content ol {
+    width: 100%;
+    max-width: 100%;
     margin: 0 0 1.8em;
     padding-left: 1.5em;
 }
 
 .article-content li {
-    max-width: 68ch;
+    min-width: 0;
     margin-bottom: 0.65em;
     padding-left: 0.25em;
+    overflow-wrap: break-word;
 }
 
 .article-content li::marker {
@@ -2351,7 +2469,8 @@ body.nav-open .site-header {
 }
 
 .article-content blockquote {
-    margin: 2.5rem 0;
+    max-width: 100%;
+    margin: 1.8rem 0;
     padding: 22px 0 22px 24px;
     border-left: 2px solid var(--accent);
     color: var(--muted);
@@ -2364,6 +2483,7 @@ body.nav-open .site-header {
 }
 
 .article-content hr {
+    width: 100%;
     height: 1px;
     margin: 4rem 0;
     border: 0;
@@ -2371,12 +2491,12 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    31. ARTICLE CODE
    ========================================================= */
 
 .article-content code {
+    max-width: 100%;
     padding: 0.16em 0.38em;
     border: 1px solid var(--line);
     background: var(--surface);
@@ -2388,9 +2508,10 @@ body.nav-open .site-header {
 
 .article-content pre {
     position: relative;
+    width: 100%;
     max-width: 100%;
     margin: 2.2rem 0;
-    padding: 24px;
+    padding: clamp(1rem, 3vw, 1.5rem);
     border: 1px solid var(--line);
     background: var(--surface);
     overflow-x: auto;
@@ -2433,7 +2554,6 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    32. ARTICLE IMAGES
    ========================================================= */
@@ -2443,13 +2563,14 @@ body.nav-open .site-header {
     width: 100%;
     height: auto;
     max-width: 100%;
-    margin: 2.8rem 0;
+    margin: 1.8rem 0;
     border: 1px solid var(--line);
 }
 
 .article-content figure {
+    width: 100%;
     max-width: 100%;
-    margin: 2.8rem 0;
+    margin: 1.8rem 0;
     overflow: hidden;
 }
 
@@ -2464,7 +2585,6 @@ body.nav-open .site-header {
     font-size: 0.66rem;
     line-height: 1.5;
 }
-
 
 
 /* =========================================================
@@ -2517,12 +2637,12 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    34. ARTICLE CALLOUT
    ========================================================= */
 
 .article-content .callout {
+    width: 100%;
     max-width: 100%;
     margin: 2.5rem 0;
     padding: 22px 24px;
@@ -2545,13 +2665,14 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
    35. ARTICLE FOOTER
    ========================================================= */
 
 .article-footer {
-    margin-top: 96px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: clamp(4rem, 8vw, 6rem);
     padding-top: 28px;
     border-top: 1px solid var(--line);
     color: var(--faint);
@@ -2559,7 +2680,6 @@ body.nav-open .site-header {
     font-size: 0.68rem;
     line-height: 1.6;
 }
-
 
 
 /* =========================================================
@@ -2591,12 +2711,12 @@ body.nav-open .site-header {
 }
 
 
-
 /* =========================================================
-   37. TABLET / SMALL DESKTOP
+   37. LARGE TABLET / SMALL DESKTOP
    ========================================================= */
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
+
     :root {
         --header-height: 68px;
     }
@@ -2613,8 +2733,9 @@ body.nav-open .site-header {
         grid-template-columns:
             55px
             minmax(0, 1fr)
-            minmax(300px, 0.8fr);
-        gap: 2rem;
+            minmax(260px, 0.8fr);
+
+        gap: clamp(1.5rem, 4vw, 2rem);
     }
 
     .hero-title {
@@ -2628,46 +2749,140 @@ body.nav-open .site-header {
     .philosophy-grid,
     .engineering-grid,
     .about-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr);
+
+        gap: clamp(3rem, 6vw, 5rem);
     }
 
     .project-content {
         left: 6%;
     }
 
-    .article-grid,
-    .articles-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .article-header-inner,
     .article-cover {
-        width: min(calc(100% - 3rem), 960px);
+        width: min(
+            calc(100% - 3rem),
+            960px
+        );
     }
 
     .article-layout {
-        grid-template-columns: minmax(160px, 200px) minmax(0, 1fr);
-        width: min(calc(100% - 3rem), 960px);
-        column-gap: 40px;
+        width: min(
+            calc(100% - 3rem),
+            960px
+        );
+
+        grid-template-columns:
+            minmax(150px, 200px)
+            minmax(0, 1fr);
+
+        column-gap: clamp(2rem, 4vw, 3rem);
+    }
+
+    .article-content {
+        max-width: none;
     }
 }
 
 
-
 /* =========================================================
-   38. ARTICLE TABLET
+   38. DESKTOP ARTICLE LAYOUT
    ========================================================= */
 
-@media (max-width: 900px) {
+@media (min-width: 1200px) {
+
+    .article-header-inner,
+    .article-cover {
+        width: min(
+            calc(100% - 6rem),
+            var(--article-width)
+        );
+    }
+
     .article-header-inner {
-        padding-top: 36px;
-        padding-bottom: 56px;
+        padding-block:
+            clamp(2.5rem, 4vw, 4rem)
+            clamp(4rem, 6vw, 5rem);
     }
 
     .article-header h1,
     .article-header-inner > h1 {
-        font-size: clamp(3.2rem, 9vw, 5.5rem);
+        max-width: 17ch;
+        font-size: clamp(4rem, 5.5vw, 6.5rem);
+    }
+
+    .article-description {
+        max-width: 68ch;
+    }
+
+    .article-cover {
+        min-height: clamp(320px, 30vw, 460px);
+    }
+
+    .article-layout {
+        width: min(
+            calc(100% - 6rem),
+            calc(
+                var(--article-toc-width) +
+                var(--article-reading-width) +
+                var(--article-gap)
+            )
+        );
+
+        grid-template-columns:
+            minmax(180px, var(--article-toc-width))
+            minmax(0, var(--article-reading-width));
+
+        column-gap: var(--article-gap);
+    }
+
+    .article-content {
+        min-width: var(--article-reading-width);
+    }
+}
+
+
+/* =========================================================
+   39. TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .section {
+        padding-block: clamp(4rem, 9vw, 7rem);
+    }
+
+    .hero-grid {
+        grid-template-columns:
+            48px
+            minmax(0, 1fr)
+            minmax(220px, 0.65fr);
+    }
+
+    .hero-content {
+        padding-block: 4rem;
+    }
+
+    .hero-system {
+        max-width: 100%;
+    }
+
+    .philosophy-grid,
+    .engineering-grid,
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .article-header-inner {
+        padding-block: 2rem 3.5rem;
+    }
+
+    .article-header h1,
+    .article-header-inner > h1 {
+        font-size: clamp(3rem, 9vw, 5.5rem);
     }
 
     .article-header-inner,
@@ -2685,15 +2900,14 @@ body.nav-open .site-header {
 
     .article-layout {
         display: block;
-        width: min(calc(100% - 2rem), 100%);
-        padding-top: 64px;
-        padding-bottom: 90px;
+        width: calc(100% - 2rem);
+        padding-block: 4rem 5.5rem;
     }
 
     .article-toc {
         position: static;
-        margin-bottom: 48px;
-        padding-bottom: 24px;
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
         border-bottom: 1px solid var(--line);
     }
 
@@ -2715,6 +2929,11 @@ body.nav-open .site-header {
         border-bottom-color: var(--accent);
     }
 
+    .article-content {
+        width: 100%;
+        max-width: none;
+    }
+
     .article-card-featured {
         grid-template-columns: 1fr;
     }
@@ -2725,17 +2944,22 @@ body.nav-open .site-header {
         border-right: 0;
         border-bottom: 1px solid var(--line);
     }
+
+    .consent-inner {
+        align-items: flex-start;
+    }
 }
 
 
-
 /* =========================================================
-   39. MOBILE
+   40. MOBILE
    ========================================================= */
 
 @media (max-width: 700px) {
+
     :root {
         --header-height: 62px;
+        --page-gutter: 1rem;
     }
 
     .container {
@@ -2760,7 +2984,7 @@ body.nav-open .site-header {
     }
 
     .mobile-nav {
-        padding: 1rem;
+        padding-top: 1rem;
     }
 
     .hero {
@@ -2782,6 +3006,7 @@ body.nav-open .site-header {
     .hero-index {
         display: flex;
         flex-direction: row;
+        align-items: center;
         padding-top: 3rem;
         writing-mode: initial;
         transform: none;
@@ -2827,6 +3052,17 @@ body.nav-open .site-header {
         min-height: 500px;
     }
 
+    .featured-project {
+        background:
+            linear-gradient(
+                to bottom,
+                transparent calc(58% - 1px),
+                var(--line) calc(58% - 1px),
+                var(--line) 58%,
+                transparent 58%
+            );
+    }
+
     .featured-project::before {
         top: 58%;
         right: 0;
@@ -2834,6 +3070,8 @@ body.nav-open .site-header {
         left: 0;
         width: 100%;
         height: 1px;
+        background: var(--line);
+        opacity: 1;
     }
 
     .featured-project::after {
@@ -2868,6 +3106,7 @@ body.nav-open .site-header {
     .writing-header {
         align-items: flex-start;
         flex-direction: column;
+        gap: 1.5rem;
     }
 
     .article-grid,
@@ -2914,6 +3153,7 @@ body.nav-open .site-header {
     .contact-links {
         flex-direction: column;
         align-items: flex-start;
+        gap: 1.25rem;
     }
 
     .footer-inner {
@@ -2925,9 +3165,16 @@ body.nav-open .site-header {
         order: 2;
     }
 
+    .consent-banner {
+        right: 0.75rem;
+        bottom: 0.75rem;
+        left: 0.75rem;
+    }
+
     .consent-inner {
         align-items: flex-start;
         flex-direction: column;
+        gap: 1rem;
     }
 
     .consent-actions {
@@ -2940,6 +3187,7 @@ body.nav-open .site-header {
 
     .consent-option {
         align-items: flex-start;
+        gap: 1rem;
     }
 
     .consent-dialog {
@@ -2955,16 +3203,16 @@ body.nav-open .site-header {
     }
 
     .article-header {
-        padding-top: calc(var(--header-height) + 45px);
+        padding-top: calc(var(--header-height) + 2.75rem);
     }
 
     .article-header-inner {
-        padding-top: 30px;
-        padding-bottom: 45px;
+        padding-top: 1.75rem;
+        padding-bottom: 2.75rem;
     }
 
     .article-back {
-        margin-bottom: 38px;
+        margin-bottom: 2rem;
     }
 
     .article-meta {
@@ -2974,6 +3222,7 @@ body.nav-open .site-header {
 
     .article-header h1,
     .article-header-inner > h1 {
+        max-width: 100%;
         font-size: clamp(3rem, 13vw, 5rem);
         line-height: 0.9;
     }
@@ -3003,12 +3252,13 @@ body.nav-open .site-header {
     }
 
     .article-layout {
-        padding-top: 48px;
-        padding-bottom: 72px;
+        width: calc(100% - 2rem);
+        padding-top: 3rem;
+        padding-bottom: 4.5rem;
     }
 
     .article-toc {
-        margin-bottom: 40px;
+        margin-bottom: 2.5rem;
     }
 
     .article-toc [data-toc-list] {
@@ -3036,6 +3286,7 @@ body.nav-open .site-header {
 
     .article-content blockquote {
         padding-left: 18px;
+        font-size: 1rem;
     }
 
     .article-content .table-wrapper {
@@ -3045,29 +3296,148 @@ body.nav-open .site-header {
     .article-content .callout {
         padding: 18px;
     }
+
+    .article-content table {
+        min-width: 520px;
+    }
+
+    .dialog-content {
+        padding: 2rem 1.25rem;
+    }
 }
 
 
+/* =========================================================
+   41. SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+    .section {
+        padding-block: 4rem;
+    }
+
+    .section-label {
+        margin-bottom: 2rem;
+    }
+
+    .hero-title {
+        max-width: 100%;
+    }
+
+    .hero-actions {
+        width: 100%;
+    }
+
+    .hero-actions .button {
+        flex: 1 1 auto;
+    }
+
+    .project-content {
+        right: 1rem;
+        bottom: 1.25rem;
+        left: 1rem;
+    }
+
+    .project-content h2 {
+        font-size: clamp(3.4rem, 17vw, 5.5rem);
+    }
+
+    .article-card-featured .article-card-body {
+        padding: 1.25rem;
+    }
+
+    .article-card-title {
+        font-size: 1.55rem;
+    }
+
+    .article-card-featured .article-card-title {
+        font-size: clamp(1.9rem, 10vw, 3rem);
+    }
+
+    .article-card-index {
+        top: 0.75rem;
+        left: 0.75rem;
+    }
+
+    .consent-dialog-header,
+    .consent-options,
+    .consent-dialog-actions {
+        padding-inline: 1rem;
+    }
+
+    .consent-option {
+        gap: 0.75rem;
+    }
+
+    .consent-option p {
+        font-size: 0.72rem;
+    }
+
+    .article-header h1,
+    .article-header-inner > h1 {
+        font-size: clamp(2.65rem, 13vw, 4.5rem);
+    }
+
+    .article-cover {
+        width: calc(100% - 1.5rem);
+    }
+
+    .article-layout,
+    .article-header-inner {
+        width: calc(100% - 1.5rem);
+    }
+
+    .article-content pre {
+        padding: 1rem;
+    }
+
+    .article-content pre code {
+        font-size: 0.7rem;
+    }
+
+    .article-content table {
+        min-width: 480px;
+    }
+}
+
 
 /* =========================================================
-   40. SMALL MOBILE
+   42. VERY SMALL MOBILE
    ========================================================= */
 
 @media (max-width: 420px) {
+
+    :root {
+        --page-gutter: 0.75rem;
+    }
+
     .container {
         width: calc(100% - 1.5rem);
     }
 
     .mobile-nav {
-        padding: 0.75rem;
+        padding-inline: 0.75rem;
     }
 
     .mobile-nav a {
         font-size: 1.7rem;
     }
 
+    .header-actions {
+        gap: 0.5rem;
+    }
+
+    .hero-index {
+        font-size: 0.52rem;
+    }
+
+    .hero-content {
+        padding-block: 2.5rem 3rem;
+    }
+
     .hero-title {
-        font-size: 3.2rem;
+        font-size: clamp(2.9rem, 15vw, 3.7rem);
     }
 
     .hero-actions {
@@ -3087,15 +3457,25 @@ body.nav-open .site-header {
     .system-footer {
         right: 0.65rem;
         left: 0.65rem;
+        font-size: 0.43rem;
     }
 
-    .article-card-footer {
-        align-items: flex-start;
-        flex-direction: column;
+    .featured-project {
+        min-height: 450px;
     }
 
-    .article-card-featured .article-card-body {
-        padding: 1.25rem;
+    .project-meta {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+    }
+
+    .project-content h2 {
+        font-size: clamp(3.1rem, 16vw, 4.5rem);
+    }
+
+    .contact-content h2 {
+        font-size: clamp(3.6rem, 19vw, 6rem);
     }
 
     .consent-banner {
@@ -3119,25 +3499,91 @@ body.nav-open .site-header {
 
     .project-dialog {
         width: calc(100% - 1rem);
-        max-width: calc(100vw - 1rem);
     }
 
     .dialog-content {
         padding: 2rem 1.25rem;
     }
 
+    .project-dialog > .dialog-close {
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+
     .article-cover {
         width: calc(100% - 1rem);
+    }
+
+    .article-layout,
+    .article-header-inner {
+        width: calc(100% - 1rem);
+    }
+
+    .article-content {
+        font-size: 0.98rem;
+    }
+
+    .article-content blockquote {
+        padding-left: 14px;
+    }
+
+    .article-content .callout {
+        padding: 1rem;
+    }
+
+    .article-content table {
+        min-width: 440px;
     }
 }
 
 
+/* =========================================================
+   43. SHORT VIEWPORTS
+   ========================================================= */
+
+@media (max-height: 700px) and (min-width: 701px) {
+
+    .hero-content {
+        padding-block: 3rem;
+    }
+
+    .hero-index {
+        padding-top: 3rem;
+    }
+}
+
 
 /* =========================================================
-   41. REDUCED MOTION
+   44. HOVER CAPABILITY
+   ========================================================= */
+
+@media (hover: none) {
+
+    .button:hover,
+    .article-card:hover .article-card-media img {
+        transform: none;
+    }
+
+    .article-card:hover .article-card-media img {
+        filter: saturate(0.82);
+    }
+
+    .area:hover {
+        background: var(--bg);
+    }
+
+    .area:hover::before {
+        width: 0;
+    }
+}
+
+
+/* =========================================================
+   45. REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+
     html {
         scroll-behavior: auto;
     }

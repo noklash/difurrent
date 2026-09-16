@@ -1,89 +1,13 @@
-import { Client } from '@notionhq/client';
-
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
-const databaseId = process.env.NOTION_DATABASE_ID;
-const cacheSeconds = Number(process.env.NOTION_CMS_CACHE_SECONDS || 120);
-
-function escapeHtml(value = '') {
-  return String(value).replace(/[&<>"']/g, (character) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  }[character]));
-}
-
-function richText(arr = []) {
-  return arr.map((item) => {
-    let text = escapeHtml(item.plain_text || '');
-
-    if (item.href) {
-      text = `<a href="${escapeHtml(item.href)}" target="_blank" rel="noopener">${text}</a>`;
-    }
-
-    if (item.annotations?.bold) {
-      text = `<strong>${text}</strong>`;
-    }
-
-    if (item.annotations?.italic) {
-      text = `<em>${text}</em>`;
-    }
-
-    if (item.annotations?.code) {
-      text = `<code>${text}</code>`;
-    }
-
-    return text;
-  }).join('');
-}
-
-function plain(arr = []) {
-  return arr.map((item) => item.plain_text || '').join('');
-}
-
-function title(propertyValue) {
-  return propertyValue?.title ? plain(propertyValue.title) : '';
-}
-
-function rich(propertyValue) {
-  return propertyValue?.rich_text ? plain(propertyValue.rich_text) : '';
-}
-
-function multi(propertyValue) {
-  return (propertyValue?.multi_select || []).map((item) => item.name);
-}
-
-function date(propertyValue) {
-  return propertyValue?.date?.start || '';
-}
-
-function url(propertyValue) {
-  return propertyValue?.url || '';
-}
-
-function checkbox(propertyValue) {
-  return Boolean(propertyValue?.checkbox);
-}
-
-function fileUrl(propertyValue) {
-  const file = propertyValue?.files?.[0];
-  return file?.external?.url || file?.file?.url || '';
-}
-
-async function getDataSourceId() {
-  const database = await notion.databases.retrieve({
-    database_id: databaseId
-  });
-
-  const dataSource = database.data_sources?.[0];
-
-  if (!dataSource?.id) {
-    throw new Error('No Notion data source found for NOTION_DATABASE_ID');
-  }
-
-  return dataSource.id;
-}
+import {
+  notion,
+  databaseId,
+  cacheSeconds,
+  getDataSourceId,
+  mapArticle,
+  richText,
+  plain,
+  escapeHtml
+} from './notion.js';
 
 async function children(blockId) {
   let results = [];
@@ -106,9 +30,7 @@ function blockToHtml(block) {
   const type = block.type;
   const payload = block[type];
 
-  if (!payload) {
-    return '';
-  }
+  if (!payload) return '';
 
   const text = richText(payload.rich_text || []);
 
@@ -134,7 +56,6 @@ function blockToHtml(block) {
     case 'image': {
       const src = payload.external?.url || payload.file?.url || '';
       const alt = plain(payload.caption || []);
-
       return src
         ? `<figure><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}"><figcaption>${escapeHtml(alt)}</figcaption></figure>`
         : '';
@@ -145,41 +66,21 @@ function blockToHtml(block) {
 }
 
 function normalizeLists(html) {
-  return html.replace(/<\/ul>\n?<ul>/g, '').replace(/<\/ol>\n?<ol>/g, '');
+  return html
+    .replace(/<\/ul>\n?<ul>/g, '')
+    .replace(/<\/ol>\n?<ol>/g, '');
 }
 
 async function renderBlocks(pageId) {
   const blocks = await children(pageId);
-  return normalizeLists(blocks.map(blockToHtml).filter(Boolean).join('\n'));
-}
-
-function mapMeta(page) {
-  const properties = page.properties;
-  const slug = rich(properties.Slug);
-  const topic = multi(properties.Topic);
-
-  return {
-    id: page.id,
-    title: title(properties['Content / Visibility Item']),
-    slug,
-    excerpt: rich(properties.Excerpt),
-    description: rich(properties.Excerpt) || rich(properties['SEO Description']),
-    seoTitle: rich(properties['SEO Title']),
-    seoDescription: rich(properties['SEO Description']),
-    canonicalUrl: url(properties['Canonical URL']) || (slug ? `https://difurrent.com/articles/${slug}/` : ''),
-    publishDate: date(properties['Publish Date']),
-    topic,
-    category: topic[0] || 'Technology',
-    featured: checkbox(properties.Featured),
-    cover: fileUrl(properties['Cover Image']),
-    coverAlt: title(properties['Content / Visibility Item']),
-    readingTime: properties['Reading Time']?.number || null
-  };
+  return normalizeLists(
+    blocks.map(blockToHtml).filter(Boolean).join('\n')
+  );
 }
 
 export default async function handler(req, res) {
   try {
-    const slug = req.query.slug;
+    const slug = req.query?.slug;
 
     if (!slug) {
       return res.status(400).json({ error: 'Missing slug' });
@@ -213,9 +114,13 @@ export default async function handler(req, res) {
 
     const html = await renderBlocks(page.id);
 
-    res.setHeader('Cache-Control', `s-maxage=${cacheSeconds}, stale-while-revalidate=86400`);
+    res.setHeader(
+      'Cache-Control',
+      `s-maxage=${cacheSeconds}, stale-while-revalidate=86400`
+    );
+
     res.status(200).json({
-      ...mapMeta(page),
+      ...mapArticle(page),
       html
     });
   } catch (error) {
