@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/articles/:slug/",
+      "destination": "/api/article-page?slug=:slug"
+    }
+  ]
+}
