@@ -34,8 +34,9 @@
     }
 
     function createArticleCard(article, index) {
-        const href =
-            `/articles/live.html?slug=${encodeURIComponent(article.slug)}`;
+    const href =
+        article.canonicalUrl ||
+        `/articles/${encodeURIComponent(article.slug)}/`;
 
         const title = escapeHtml(article.title || "Untitled article");
         const category = escapeHtml(article.category || "Technology");
