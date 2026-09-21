@@ -1,532 +1,441 @@
-"use strict";
-
 (function () {
-    const params = new URLSearchParams(
-        window.location.search
+  'use strict';
+
+  function getSlug() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('slug');
+  }
+
+  function updateMeta(name, content) {
+    if (!content) return;
+
+    let element = document.querySelector(`meta[name="${name}"]`);
+
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute('name', name);
+      document.head.appendChild(element);
+    }
+
+    element.setAttribute('content', content);
+  }
+
+  function updateProperty(property, content) {
+    if (!content) return;
+
+    let element = document.querySelector(
+      `meta[property="${property}"]`
     );
 
-    const slug = params.get("slug");
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute('property', property);
+      document.head.appendChild(element);
+    }
 
-    const titleEl = document.querySelector(
-        "[data-notion-title]"
+    element.setAttribute('content', content);
+  }
+
+  function updateCanonical(url) {
+    if (!url) return;
+
+    let link = document.querySelector(
+      'link[rel="canonical"]'
     );
 
-    const descriptionEl = document.querySelector(
-        "[data-notion-description]"
+    if (!link) {
+      link = document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      document.head.appendChild(link);
+    }
+
+    link.setAttribute('href', url);
+  }
+
+  function updateArticleJsonLd(article) {
+    let script = document.querySelector(
+      'script[data-article-jsonld]'
     );
 
-    const categoryEl = document.querySelector(
-        "[data-notion-category]"
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.setAttribute(
+        'data-article-jsonld',
+        ''
+      );
+      document.head.appendChild(script);
+    }
+
+    const data = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: article.title || '',
+      description:
+        article.seoDescription ||
+        article.description ||
+        article.excerpt ||
+        '',
+      url:
+        article.canonicalUrl ||
+        article.publishedUrl ||
+        window.location.href,
+      datePublished: article.publishDate || undefined,
+      image: article.cover
+        ? [article.cover]
+        : undefined,
+      publisher: {
+        '@type': 'Organization',
+        name: 'Difurrent',
+        url: 'https://difurrent.com'
+      }
+    };
+
+    script.textContent = JSON.stringify(
+      data,
+      null,
+      2
+    );
+  }
+
+  function renderCover(article) {
+    const container = document.querySelector(
+      '[data-notion-cover]'
     );
 
-    const dateEl = document.querySelector(
-        "[data-notion-date]"
+    if (!container) return;
+
+    if (!article.cover) {
+      container.innerHTML = '';
+      container.hidden = true;
+      return;
+    }
+
+    container.hidden = false;
+
+    container.innerHTML = `
+      <img
+        src="${article.cover}"
+        alt="${article.coverAlt || article.title || 'Article cover'}"
+        loading="eager"
+        decoding="async"
+      >
+    `;
+  }
+
+  function renderContent(article) {
+    const content = document.querySelector(
+      '[data-notion-content]'
     );
 
-    const readingTimeEl = document.querySelector(
-        "[data-notion-reading-time]"
+    if (!content) return;
+
+    content.innerHTML = article.html || '';
+  }
+
+  function renderError(message) {
+    const content = document.querySelector(
+      '[data-notion-content]'
     );
 
-    const authorEl = document.querySelector(
-        "[data-notion-author]"
+    if (!content) return;
+
+    content.innerHTML = `
+      <p>${message}</p>
+    `;
+  }
+
+  function setupArticleToc() {
+    if (
+      typeof window.setupArticleToc ===
+      'function'
+    ) {
+      window.setupArticleToc();
+      return;
+    }
+
+    const toc = document.querySelector(
+      '[data-toc-list]'
     );
 
-    const coverEl = document.querySelector(
-        "[data-notion-cover]"
+    const content = document.querySelector(
+      '[data-notion-content]'
     );
 
-    const contentEl = document.querySelector(
-        "[data-notion-content]"
+    if (!toc || !content) return;
+
+    const headings = content.querySelectorAll(
+      'h2, h3'
     );
 
-    /*
-    |--------------------------------------------------------------------------
-    | Helpers
-    |--------------------------------------------------------------------------
-    */
+    if (!headings.length) {
+      const wrapper = document.querySelector(
+        '[data-article-toc]'
+      );
 
-    function setText(element, value) {
-        if (!element) {
-            return;
-        }
+      if (wrapper) {
+        wrapper.hidden = true;
+      }
 
-        element.textContent = value || "";
+      return;
     }
 
-    function formatDate(value) {
-        if (!value) {
-            return "";
-        }
+    toc.innerHTML = '';
 
-        const date = new Date(value);
+    headings.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id =
+          heading.textContent
+            .trim()
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-') ||
+          `section-${index + 1}`;
+      }
 
-        if (Number.isNaN(date.getTime())) {
-            return value;
-        }
+      const item =
+        document.createElement('li');
 
-        return new Intl.DateTimeFormat(
-            "en",
-            {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }
-        ).format(date);
+      const link =
+        document.createElement('a');
+
+      link.href = `#${heading.id}`;
+      link.textContent =
+        heading.textContent.trim();
+
+      if (heading.tagName === 'H3') {
+        item.classList.add(
+          'toc-subitem'
+        );
+      }
+
+      item.appendChild(link);
+      toc.appendChild(item);
+    });
+  }
+
+  function updateArticle(article) {
+    const title =
+      article.seoTitle ||
+      article.title ||
+      'Difurrent Writing';
+
+    const description =
+      article.seoDescription ||
+      article.description ||
+      article.excerpt ||
+      '';
+
+    const canonical =
+      article.canonicalUrl ||
+      article.publishedUrl ||
+      window.location.href;
+
+    document.title =
+      title.includes('Difurrent')
+        ? title
+        : `${title} | Difurrent`;
+
+    updateMeta(
+      'description',
+      description
+    );
+
+    updateProperty(
+      'og:title',
+      title
+    );
+
+    updateProperty(
+      'og:description',
+      description
+    );
+
+    updateProperty(
+      'og:url',
+      canonical
+    );
+
+    updateProperty(
+      'og:type',
+      'article'
+    );
+
+    updateMeta(
+      'twitter:title',
+      title
+    );
+
+    updateMeta(
+      'twitter:description',
+      description
+    );
+
+    updateCanonical(canonical);
+
+    if (article.cover) {
+      updateProperty(
+        'og:image',
+        article.cover
+      );
+
+      updateMeta(
+        'twitter:image',
+        article.cover
+      );
     }
 
-    function updateMeta(name, content) {
-        if (!content) {
-            return;
-        }
+    updateArticleJsonLd(article);
+  }
 
-        let meta = document.querySelector(
-            `meta[name="${name}"]`
-        );
-
-        if (!meta) {
-            meta = document.createElement("meta");
-
-            meta.setAttribute(
-                "name",
-                name
-            );
-
-            document.head.appendChild(meta);
-        }
-
-        meta.setAttribute(
-            "content",
-            content
-        );
+  function renderArticle(article) {
+    if (!article) {
+      renderError(
+        'Unable to load this article.'
+      );
+      return;
     }
 
-    function updateProperty(property, content) {
-        if (!content) {
-            return;
-        }
+    updateArticle(article);
 
-        let meta = document.querySelector(
-            `meta[property="${property}"]`
-        );
+    const title =
+      document.querySelector(
+        '[data-notion-title]'
+      );
 
-        if (!meta) {
-            meta = document.createElement("meta");
+    const description =
+      document.querySelector(
+        '[data-notion-description]'
+      );
 
-            meta.setAttribute(
-                "property",
-                property
-            );
+    const category =
+      document.querySelector(
+        '[data-notion-category]'
+      );
 
-            document.head.appendChild(meta);
-        }
+    const date =
+      document.querySelector(
+        '[data-notion-date]'
+      );
 
-        meta.setAttribute(
-            "content",
-            content
-        );
+    const readingTime =
+      document.querySelector(
+        '[data-notion-reading-time]'
+      );
+
+    const author =
+      document.querySelector(
+        '[data-notion-author]'
+      );
+
+    if (title) {
+      title.textContent =
+        article.title || '';
     }
 
-    function updateCanonical(url) {
-        if (!url) {
-            return;
-        }
-
-        let link = document.querySelector(
-            'link[rel="canonical"]'
-        );
-
-        if (!link) {
-            link = document.createElement("link");
-
-            link.setAttribute(
-                "rel",
-                "canonical"
-            );
-
-            document.head.appendChild(link);
-        }
-
-        link.setAttribute(
-            "href",
-            url
-        );
+    if (description) {
+      description.textContent =
+        article.excerpt ||
+        article.description ||
+        '';
     }
 
-    function updateArticleJsonLd(article) {
-        const existing =
-            document.querySelector(
-                'script[data-article-schema]'
-            );
-
-        existing?.remove();
-
-        const title =
-            article.seoTitle ||
-            article.title ||
-            "Difurrent Article";
-
-        const description =
-            article.seoDescription ||
-            article.description ||
-            article.excerpt ||
-            "";
-
-        const canonicalUrl =
-            article.canonicalUrl ||
-            window.location.href;
-
-        const published =
-            article.publishDate || "";
-
-        const schema = {
-            "@context": "https://schema.org",
-            "@type": "Article",
-            "headline": title,
-            "description": description,
-            "url": canonicalUrl,
-            "datePublished": published,
-            "dateModified":
-                article.modifiedDate ||
-                published,
-            "author": {
-                "@type": "Person",
-                "name":
-                    article.author ||
-                    "Difurrent"
-            },
-            "publisher": {
-                "@type": "Organization",
-                "name": "Difurrent",
-                "url": "https://difurrent.com/"
-            },
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": canonicalUrl
-            }
-        };
-
-        if (article.cover) {
-            schema.image = [
-                article.cover
-            ];
-        }
-
-        const script =
-            document.createElement("script");
-
-        script.type =
-            "application/ld+json";
-
-        script.dataset.articleSchema =
-            "true";
-
-        script.textContent =
-            JSON.stringify(schema);
-
-        document.head.appendChild(script);
+    if (category) {
+      category.textContent =
+        article.category ||
+        article.topic?.[0] ||
+        'Technology';
     }
 
-    function renderCover(article) {
-        if (!coverEl) {
-            return;
-        }
-
-        coverEl.replaceChildren();
-
-        if (!article.cover) {
-            return;
-        }
-
-        const figure =
-            document.createElement("figure");
-
-        figure.className =
-            "article-cover";
-
-        const image =
-            document.createElement("img");
-
-        image.src = article.cover;
-
-        image.alt =
-            article.coverAlt ||
-            article.title ||
-            "";
-
-        image.loading = "eager";
-        image.decoding = "async";
-
-        figure.appendChild(image);
-        coverEl.appendChild(figure);
+    if (date) {
+      date.textContent =
+        article.publishDate || '';
     }
 
-    function renderContent(article) {
-        if (!contentEl) {
-            return;
-        }
-
-        contentEl.innerHTML =
-            article.html ||
-            "<p>No article content.</p>";
+    if (readingTime) {
+      readingTime.textContent =
+        article.readingTime
+          ? `${article.readingTime} min read`
+          : '';
     }
 
-    function renderError(message) {
-        if (titleEl) {
-            titleEl.textContent =
-                "Article unavailable";
-        }
-
-        if (descriptionEl) {
-            descriptionEl.textContent = "";
-        }
-
-        if (contentEl) {
-            contentEl.replaceChildren();
-
-            const paragraph =
-                document.createElement("p");
-
-            paragraph.textContent =
-                message ||
-                "The article could not be loaded.";
-
-            contentEl.appendChild(
-                paragraph
-            );
-        }
-
-        if (coverEl) {
-            coverEl.replaceChildren();
-        }
+    if (author) {
+      if (article.author) {
+        author.textContent =
+          article.author;
+      } else {
+        author.textContent = '';
+        author.hidden = true;
+      }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Article metadata
-    |--------------------------------------------------------------------------
-    */
+    renderCover(article);
+    renderContent(article);
+    setupArticleToc();
+  }
 
-    function updateArticle(article) {
-        const title =
-            article.seoTitle ||
-            article.title ||
-            "Difurrent Article";
-
-        const description =
-            article.seoDescription ||
-            article.description ||
-            article.excerpt ||
-            "";
-
-        const canonicalUrl =
-            article.canonicalUrl ||
-            window.location.href;
-
-        document.title =
-            `${title} — Difurrent`;
-
-        updateMeta(
-            "description",
-            description
-        );
-
-        updateProperty(
-            "og:title",
-            title
-        );
-
-        updateProperty(
-            "og:description",
-            description
-        );
-
-        updateProperty(
-            "og:url",
-            canonicalUrl
-        );
-
-        updateProperty(
-            "og:type",
-            "article"
-        );
-
-        updateMeta(
-            "twitter:title",
-            title
-        );
-
-        updateMeta(
-            "twitter:description",
-            description
-        );
-
-        updateCanonical(
-            canonicalUrl
-        );
-
-        if (article.cover) {
-            updateProperty(
-                "og:image",
-                article.cover
-            );
-
-            updateMeta(
-                "twitter:image",
-                article.cover
-            );
-
-            if (article.coverAlt) {
-                updateProperty(
-                    "og:image:alt",
-                    article.coverAlt
-                );
-
-                updateMeta(
-                    "twitter:image:alt",
-                    article.coverAlt
-                );
-            }
-        }
-
-        updateArticleJsonLd(
-            article
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Article rendering
-    |--------------------------------------------------------------------------
-    */
-
-    function renderArticle(article) {
-        updateArticle(article);
-
-        setText(
-            titleEl,
-            article.title
-        );
-
-        setText(
-            descriptionEl,
-            article.description ||
-            article.excerpt
-        );
-
-        setText(
-            categoryEl,
-            article.category ||
-            "Technology"
-        );
-
-        if (dateEl) {
-            const publishDate =
-                article.publishDate || "";
-
-            dateEl.setAttribute(
-                "datetime",
-                publishDate
-            );
-
-            dateEl.textContent =
-                formatDate(
-                    publishDate
-                );
-        }
-
-        setText(
-            readingTimeEl,
-            article.readingTime
-                ? `${article.readingTime} min read`
-                : ""
-        );
-
-        if (authorEl) {
-            if (article.author) {
-                authorEl.hidden = false;
-
-                authorEl.textContent =
-                    `By ${article.author}`;
-            } else {
-                authorEl.hidden = true;
-                authorEl.textContent = "";
-            }
-        }
-
-        renderCover(article);
-        renderContent(article);
-
-        /*
-         * Article content now exists in the DOM,
-         * so build the table of contents.
-         */
-        if (
-            typeof setupArticleToc ===
-            "function"
-        ) {
-            setupArticleToc();
-        }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Request
-    |--------------------------------------------------------------------------
-    */
+  async function loadArticleFromApi() {
+    const slug = getSlug();
 
     if (!slug) {
-        renderError(
-            "Missing article slug."
-        );
-
-        return;
+      renderError(
+        'No article specified.'
+      );
+      return;
     }
 
-    const endpoint =
-        `/api/article?slug=${encodeURIComponent(
+    try {
+      const response =
+        await fetch(
+          `/api/article?slug=${encodeURIComponent(
             slug
-        )}`;
+          )}`
+        );
 
-    fetch(endpoint, {
-        headers: {
-            Accept: "application/json"
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(
-                    `Article request failed: ${response.status}`
-                );
-            }
+      if (!response.ok) {
+        throw new Error(
+          `Article request failed with status ${response.status}`
+        );
+      }
 
-            return response.json();
-        })
-        .then(article => {
-            if (
-                !article ||
-                typeof article !== "object"
-            ) {
-                throw new Error(
-                    "Invalid article response."
-                );
-            }
+      const article =
+        await response.json();
 
-            if (article.error) {
-                throw new Error(
-                    article.error
-                );
-            }
+      renderArticle(article);
+    } catch (error) {
+      console.error(
+        'Difurrent article error:',
+        error
+      );
 
-            renderArticle(article);
-        })
-        .catch(error => {
-            console.error(
-                "Difurrent article error:",
-                error
-            );
+      renderError(
+        'Unable to load this article right now.'
+      );
+    }
+  }
 
-            renderError(
-                error.message
-            );
-        });
+  /*
+   * Server-rendered article path.
+   *
+   * article-page.js injects the article into
+   * window.__ARTICLE__ before this script runs.
+   *
+   * This means the browser does not need to make
+   * another request to /api/article.
+   */
+  if (window.__ARTICLE__) {
+    renderArticle(
+      window.__ARTICLE__
+    );
+    return;
+  }
+
+  /*
+   * Legacy/client-rendered fallback.
+   *
+   * Keeps /articles/live.html?slug=...
+   * working if someone still reaches it directly.
+   */
+  loadArticleFromApi();
 })();
