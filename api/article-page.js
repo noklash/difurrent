@@ -751,9 +751,10 @@ ${content}
 </footer>
 
 <script>
-  window.__ARTICLE__ = ${JSON.stringify(
-    article
-  )};
+  window.__ARTICLE__ = ${JSON.stringify({
+    ...article,
+    html: content
+  })};
 </script>
 
 </body>
